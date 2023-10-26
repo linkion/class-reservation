@@ -1,0 +1,19 @@
+services:
+  frontend:
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: bash -c "cd frontend && trunk serve --address 0.0.0.0"
+    ports:
+      - "8080:8080"
+  backend:
+    build: 
+      context: ./backend/
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+  

@@ -31,14 +31,12 @@ using sqlx to connect server with SQL database
 * the full rust stack is based off of this [template](https://github.com/dontlaugh/rocket-yew-starter-pack)
 
 ## Building and running
-Install `trunk`
+Using `Docker`
 
-```cargo install trunk```
+Run 
 
-Add wasm build target
+```docker compose up```
 
-```rustup target add wasm32-unknown-unknown```
+connect to development site
 
-Start Development client server
-
-```trunk serve --open```
+```http://localhost:8080```
