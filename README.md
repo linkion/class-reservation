@@ -2,6 +2,7 @@
 CS128H Final Project
 
 Group: Milo & Patrick
+
 Members:
 * Patrick Orave (porav3)
 * Milosz Brodziak (mbrod6)
