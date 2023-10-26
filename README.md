@@ -10,10 +10,12 @@ Members:
 Seeing the slowness of registering for classes, we figured, hey, what if we were to write it in Rust? And that's this project. We're not expecting this to be used in any capacity by the school, this'll be a proof of concept of using WASM and the power of Rust to make a performant class registration system.
 
 ## Technical Information
-Frontend
+**Frontend**
+
 written with the rust Yew webframework using WASM
 
-Backend
+**Backend**
+
 Rust Rocket server with REST
 using websockets to update all clients of changes to registrations
 using sqlx to connect server with SQL database
