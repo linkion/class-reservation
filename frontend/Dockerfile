@@ -1,5 +1,9 @@
 FROM rust:latest
 
-run cargo install trunk
-run rustup target add wasm32-unknown-unknown
-run cargo install cargo-watch
+RUN rustup target add wasm32-unknown-unknown
+RUN cargo install --locked trunk
+
+ADD . /frontend
+WORKDIR /frontend
+
+CMD ["trunk", "serve"]
