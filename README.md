@@ -28,7 +28,7 @@ using sqlx to connect server with SQL database
 * Setting up a development server for testing the frontend with the backend with example data
 
 ## References
-* the full rust stack is based off of this [template](https://github.com/dontlaugh/rocket-yew-starter-pack)
+* the full rust stack is based off of this [rocket-yew-starter-pack](https://github.com/dontlaugh/rocket-yew-starter-pack) and [rust-web-starter](https://github.com/ghotiphud/rust-web-starter)
 
 ## Building and running
 Using `Docker`
