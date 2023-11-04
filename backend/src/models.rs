@@ -2,6 +2,10 @@ use diesel::prelude::*;
 
 use crate::schema::{classes, students, teachers, classes_students, classes_teachers};
 
+use rocket::serde::Serialize;
+
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
 #[derive(Queryable, Selectable, Identifiable, PartialEq, Debug)]
 #[diesel(table_name = classes)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
@@ -13,6 +17,8 @@ pub struct Class {
     pub published: bool,
 }
 
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
 #[derive(Queryable, Selectable, Identifiable, PartialEq, Debug)]
 #[diesel(table_name = students)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
@@ -25,6 +31,8 @@ pub struct Student {
     pub net_id: Option<String>,
 }
 
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
 #[derive(Queryable, Selectable, Identifiable, PartialEq, Debug)]
 #[diesel(table_name = teachers)]
 #[diesel(check_for_backend(diesel::pg::Pg))]

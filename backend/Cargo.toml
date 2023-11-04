@@ -10,7 +10,7 @@ name = "backend"
 path = "src/main.rs"
 
 [dependencies]
-rocket = "=0.5.0-rc.3"
+rocket = { version = "=0.5.0-rc.3", features = ["secrets", "tls", "json"] }
 diesel = { version = "2.1", features = ["postgres"] }
 dotenvy = "0.15"
 
