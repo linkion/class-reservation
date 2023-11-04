@@ -2,7 +2,7 @@ use diesel::prelude::*;
 
 use crate::schema::{classes, students, classes_students};
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Identifiable, PartialEq, Debug)]
 #[diesel(table_name = classes)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Class {
@@ -14,7 +14,7 @@ pub struct Class {
     pub published: bool,
 }
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Identifiable, PartialEq, Debug)]
 #[diesel(table_name = students)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Student {
@@ -26,8 +26,8 @@ pub struct Student {
     pub net_id: Option<String>,
 }
 
-#[derive(Queryable, Selectable)]
-#[diesel(table_name = classes_students)]
+#[derive(Queryable, Selectable, Identifiable, PartialEq, Debug)]
+#[diesel(table_name = teachers)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct ClassesStudent {
     pub class_id: i32,
