@@ -62,3 +62,21 @@ pub struct NewClass<'a> {
     pub class_name: &'a str,
     pub max_students: &'a i32,
 }
+
+#[derive(Insertable)]
+#[diesel(table_name = students)]
+pub struct NewStudent<'a> {
+    pub first_name: &'a str,
+    pub last_name: &'a str,
+    pub middle_name: &'a str,
+    pub uin: &'a i32,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = teachers)]
+pub struct NewTeacher<'a> {
+    pub first_name: &'a str,
+    pub last_name: &'a str,
+    pub middle_name: &'a str,
+    pub email: &'a str,
+}
