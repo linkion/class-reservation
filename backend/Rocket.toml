@@ -1,0 +1,6 @@
+[global]
+address = "0.0.0.0"
+port = 8081
+
+[global.databases]
+rustydb = { url = "postgres://postgres:password@db/classdb" }
