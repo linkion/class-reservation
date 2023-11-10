@@ -29,11 +29,11 @@ services:
     build: 
       context: ./backend/
       dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    #command: bash -c "diesel setup && cargo watch -x run"
     volumes:
       - type: bind
         source: ./backend
         target: /backend
-    ports:
-      - "8081:8081"
-    command: bash -c "diesel setup && cargo watch -x run"
   

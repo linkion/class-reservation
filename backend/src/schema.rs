@@ -6,7 +6,8 @@ diesel::table! {
         class_name -> Varchar,
         max_students -> Int4,
         registered_students -> Int4,
-        published -> Bool,
+        subject_code -> Varchar,
+        course_number -> Int4,
     }
 }
 

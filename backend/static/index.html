@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Backend</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+        <h1>Welcome to the backend of Class Reservations</h1>  
+        <form action="http://localhost:8081/classes" method="POST">
+          <label for="cname">Class name:</label><br>
+          <input type="text" id="cname" name="name"><br>
+          <label for="mstudents">Max students:</label><br>
+          <input type="text" id="mstudents" name="max_students"><br>
+          <label for="scode">Subject code:</label><br>
+          <input type="text" id="scode" name="subject_code"><br>
+          <label for="cnum">Course number:</label><br>
+          <input type="text" id="cnum" name="course_number"><br>
+          <input type="submit" value="Submit">
+        </form>
+    </main>
+  </body>
+</html>
