@@ -43,7 +43,6 @@ fn get_classes() -> Json<ClassesJson> {
 #[serde(crate = "rocket::serde")]
 #[derive(FromForm)]
 struct ClassInput<> {
-    // The raw, undecoded value. You _probably_ want `String` instead.
     name: String,
     max_students: i32,
     subject_code: String,
