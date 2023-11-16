@@ -4,5 +4,6 @@ CREATE TABLE classes (
   class_name VARCHAR NOT NULL,
   max_students INTEGER NOT NULL,
   registered_students INTEGER NOT NULL DEFAULT 0,
-  published BOOLEAN NOT NULL DEFAULT TRUE
+  subject_code VARCHAR NOT NULL,
+  course_number INTEGER NOT NULL
 );

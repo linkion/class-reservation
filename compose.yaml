@@ -5,8 +5,10 @@ services:
       POSTGRES_DB: "classdb"
       POSTGRES_PASSWORD: "password"
     image: postgres:latest
+    volumes:
+       - ./data:/var/lib/postgresql/data
     ports:
-    - "7000:5432"
+    - "8082:5432"
 
   frontend:
     restart: on-failure
@@ -29,11 +31,11 @@ services:
     build: 
       context: ./backend/
       dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    #command: bash -c "diesel setup && cargo watch -x run"
     volumes:
       - type: bind
         source: ./backend
         target: /backend
-    ports:
-      - "8081:8081"
-    command: bash -c "diesel setup && cargo watch -x run"
   

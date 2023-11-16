@@ -14,7 +14,8 @@ pub struct Class {
     pub class_name: String,
     pub max_students: i32,
     pub registered_students: i32,
-    pub published: bool,
+    pub subject_code: String,
+    pub course_number: i32,
 }
 
 #[derive(Serialize)]
@@ -69,6 +70,8 @@ pub struct ClassesTeacher {
 pub struct NewClass<'a> {
     pub class_name: &'a str,
     pub max_students: &'a i32,
+    pub subject_code: &'a str,
+    pub course_number: &'a i32,
 }
 
 #[derive(Insertable)]

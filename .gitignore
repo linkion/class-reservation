@@ -1,4 +1,5 @@
-.env
+
 **/target
 **/dist
 .DS_Store
+data/
