@@ -8,6 +8,7 @@ diesel::table! {
         registered_students -> Int4,
         subject_code -> Varchar,
         course_number -> Int4,
+        teacher_name -> Nullable<Varchar>,
     }
 }
 

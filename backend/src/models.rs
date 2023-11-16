@@ -16,6 +16,7 @@ pub struct Class {
     pub registered_students: i32,
     pub subject_code: String,
     pub course_number: i32,
+    pub teacher_name: Option<String>,
 }
 
 #[derive(Serialize)]
