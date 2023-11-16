@@ -1,10 +1,10 @@
 use backend::{*, models::*};
 use diesel::prelude::*;
 use rocket::form::Form;
-use rocket::serde::Serialize;
-use rocket::serde::json::Json;
+use rocket::serde::{Serialize, Deserialize, json::Json};
 use rocket::fs::NamedFile;
 
+#[cfg(test)] mod tests;
 #[macro_use] extern crate rocket;
 
 #[get("/")]
@@ -39,6 +39,8 @@ fn get_classes() -> Json<ClassesJson> {
     Json(ClassesJson { classes: results })
 }
 
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
 #[derive(FromForm)]
 struct ClassInput<> {
     // The raw, undecoded value. You _probably_ want `String` instead.
@@ -50,6 +52,19 @@ struct ClassInput<> {
 
 #[post("/classes", data="<form_input>")]
 async fn post_class(form_input: Form<ClassInput>) -> Json<Class> {
+    use backend::schema::classes;
+
+    let connection = &mut establish_connection();
+
+    let new_class = NewClass {class_name: &form_input.name,max_students: &form_input.max_students, subject_code: &form_input.subject_code.to_ascii_uppercase(), course_number: &form_input.course_number };
+    
+    let result = diesel::insert_into(classes::table).values(new_class).returning(Class::as_returning()).get_result(connection).expect("failed to insert class");
+    
+    Json(result)
+}
+
+#[post("/classes", data="<form_input>")]
+async fn post_class_json(form_input: Json<ClassInput>) -> Json<Class> {
     use backend::schema::classes;
 
     let connection = &mut establish_connection();
