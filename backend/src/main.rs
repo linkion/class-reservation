@@ -51,19 +51,6 @@ struct ClassInput<> {
 }
 
 #[post("/classes", data="<form_input>")]
-async fn post_class(form_input: Form<ClassInput>) -> Json<Class> {
-    use backend::schema::classes;
-
-    let connection = &mut establish_connection();
-
-    let new_class = NewClass {class_name: &form_input.name,max_students: &form_input.max_students, subject_code: &form_input.subject_code.to_ascii_uppercase(), course_number: &form_input.course_number };
-    
-    let result = diesel::insert_into(classes::table).values(new_class).returning(Class::as_returning()).get_result(connection).expect("failed to insert class");
-    
-    Json(result)
-}
-
-#[post("/classes", data="<form_input>")]
 async fn post_class_json(form_input: Json<ClassInput>) -> Json<Class> {
     use backend::schema::classes;
 
@@ -76,11 +63,26 @@ async fn post_class_json(form_input: Json<ClassInput>) -> Json<Class> {
     Json(result)
 }
 
+#[post("/classes", data="<form_input>", rank=1)]
+async fn post_class(form_input: Form<ClassInput>) -> Json<Class> {
+    use backend::schema::classes;
+
+    let connection = &mut establish_connection();
+
+    let new_class = NewClass {class_name: &form_input.name,max_students: &form_input.max_students, subject_code: &form_input.subject_code.to_ascii_uppercase(), course_number: &form_input.course_number };
+    
+    let result = diesel::insert_into(classes::table).values(new_class).returning(Class::as_returning()).get_result(connection).expect("failed to insert class");
+    
+    Json(result)
+}
+
+
 #[launch]
 fn rocket() -> _ {
     rocket::build().mount("/", routes![index])
         .mount("/", routes![get_class])
         .mount("/", routes![get_classes])
         .mount("/", routes![post_class])
+        .mount("/", routes![post_class_json])
 }
 
