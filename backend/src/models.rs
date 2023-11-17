@@ -48,6 +48,7 @@ pub struct Teacher {
 #[diesel(belongs_to(Class))]
 #[diesel(belongs_to(Student))]
 #[diesel(table_name = classes_students)]
+#[derive(Insertable)]
 #[diesel(primary_key(class_id, student_id))]
 pub struct ClassesStudent {
     pub class_id: i32,
@@ -58,6 +59,7 @@ pub struct ClassesStudent {
 #[diesel(belongs_to(Class))]
 #[diesel(belongs_to(Teacher))]
 #[diesel(table_name = classes_teachers)]
+#[derive(Insertable)]
 #[diesel(primary_key(class_id, teacher_id))]
 pub struct ClassesTeacher {
     pub class_id: i32,
@@ -79,7 +81,6 @@ pub struct NewStudent<'a> {
     pub first_name: &'a str,
     pub last_name: &'a str,
     pub middle_name: &'a str,
-    pub uin: &'a i32,
 }
 
 #[derive(Insertable)]
