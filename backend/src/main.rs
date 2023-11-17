@@ -80,6 +80,28 @@ async fn post_class(form_input: Form<ClassInput>, queue: &State<Sender<Class>>) 
     Json(result)
 }
 
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
+#[derive(FromForm)]
+pub struct NewStudent {
+    pub first_name: String,
+    pub last_name: String,
+    pub middle_name: String
+}
+
+#[post("/students", data="<form_input>")]
+async fn post_student(form_input: Json<NewStudent>) -> Json<Student> {
+    use backend::schema::students;
+
+    let connection = &mut establish_connection();
+
+    let new_student = NewStudent { first_name: form_input.first_name, last_name: form_input.last_name, middle_name: form_input.middle_name };
+
+    let result = diesel::insert_into(students::table).values(new_student).returning(Student::as_returning()).get_result(connection).expect("failed to insert student");
+
+    Json(result)
+}
+
 #[get("/classes_events")]
 async fn classes_events(queue: &State<Sender<Class>>, mut end: Shutdown) -> EventStream![] {
     let mut rx = queue.subscribe();

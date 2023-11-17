@@ -32,8 +32,6 @@ diesel::table! {
         first_name -> Varchar,
         last_name -> Varchar,
         middle_name -> Nullable<Varchar>,
-        uin -> Int4,
-        net_id -> Nullable<Varchar>,
     }
 }
 

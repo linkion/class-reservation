@@ -29,8 +29,6 @@ pub struct Student {
     pub first_name: String,
     pub last_name: String,
     pub middle_name: Option<String>,
-    pub uin: i32,
-    pub net_id: Option<String>,
 }
 
 #[derive(Serialize)]
