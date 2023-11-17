@@ -1,8 +1,12 @@
 use backend::{*, models::*};
+use rocket::{State, Shutdown};
 use diesel::prelude::*;
 use rocket::form::Form;
 use rocket::serde::{Serialize, Deserialize, json::Json};
 use rocket::fs::NamedFile;
+use rocket::response::stream::{EventStream, Event};
+use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
+use rocket::tokio::select;
 
 #[cfg(test)] mod tests;
 #[macro_use] extern crate rocket;
@@ -50,7 +54,7 @@ struct ClassInput<> {
 }
 
 #[post("/classes", data="<form_input>")]
-async fn post_class_json(form_input: Json<ClassInput>) -> Json<Class> {
+async fn post_class_json(form_input: Json<ClassInput>, queue: &State<Sender<Class>>) -> Json<Class> {
     use backend::schema::classes;
 
     let connection = &mut establish_connection();
@@ -58,12 +62,12 @@ async fn post_class_json(form_input: Json<ClassInput>) -> Json<Class> {
     let new_class = NewClass {class_name: &form_input.name,max_students: &form_input.max_students, subject_code: &form_input.subject_code.to_ascii_uppercase(), course_number: &form_input.course_number };
     
     let result = diesel::insert_into(classes::table).values(new_class).returning(Class::as_returning()).get_result(connection).expect("failed to insert class");
-    
+    let _res = queue.send(result.clone());
     Json(result)
 }
 
 #[post("/classes", data="<form_input>", rank=1)]
-async fn post_class(form_input: Form<ClassInput>) -> Json<Class> {
+async fn post_class(form_input: Form<ClassInput>, queue: &State<Sender<Class>>) -> Json<Class> {
     use backend::schema::classes;
 
     let connection = &mut establish_connection();
@@ -72,16 +76,38 @@ async fn post_class(form_input: Form<ClassInput>) -> Json<Class> {
     
     let result = diesel::insert_into(classes::table).values(new_class).returning(Class::as_returning()).get_result(connection).expect("failed to insert class");
     
+    let _res = queue.send(result.clone());
     Json(result)
 }
 
+#[get("/classes_events")]
+async fn classes_events(queue: &State<Sender<Class>>, mut end: Shutdown) -> EventStream![] {
+    let mut rx = queue.subscribe();
+    EventStream! {
+        loop {
+            let msg = select! {
+                msg = rx.recv() => match msg {
+                    Ok(msg) => msg,
+                    Err(RecvError::Closed) => break,
+                    Err(RecvError::Lagged(_)) => continue,
+                },
+                _ = &mut end => break,
+            };
+
+            yield Event::json(&msg);
+        }
+    }
+}
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    rocket::build()
+        .manage(channel::<Class>(50_000).0)
+        .mount("/", routes![index])
         .mount("/", routes![get_class])
         .mount("/", routes![get_classes])
         .mount("/", routes![post_class])
         .mount("/", routes![post_class_json])
+        .mount("/", routes![classes_events])
 }
 
