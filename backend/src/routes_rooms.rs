@@ -7,9 +7,42 @@ use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
 use rocket::tokio::select;
 
 // CREATE new room at given dormitory (dorm_id)
-#[post("/rooms/<dorm_id>")]
-fn post_room(dorm_id: i32) -> Json<RoomJsonRet> {
-    todo!()
+#[post("/rooms/<dorm_id>", data="<form_input>", rank=0)]
+fn post_room(dorm_id: i32, form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
+    use backend::schema::rooms;
+
+    let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants, occupants: &0 };
+
+    let connection = &mut establish_connection();
+
+    let result: Room = diesel::insert_into(rooms::table).values(new_room).returning(Room::as_returning()).get_result(connection).expect("failed to insert room");
+    
+    Json(RoomJsonRet { 
+        id: result.id, 
+        room_number: result.room_number, 
+        max_occupants: result.max_occupants, 
+        occupants: result.occupants, 
+        links: vec![],
+    })
+}
+
+#[post("/rooms/<dorm_id>", data="<form_input>", rank=1)]
+fn post_room_json(dorm_id: i32, form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
+    use backend::schema::rooms;
+
+    let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants, occupants: &0 };
+
+    let connection = &mut establish_connection();
+
+    let result: Room = diesel::insert_into(rooms::table).values(new_room).returning(Room::as_returning()).get_result(connection).expect("failed to insert room");
+    
+    Json(RoomJsonRet { 
+        id: result.id, 
+        room_number: result.room_number, 
+        max_occupants: result.max_occupants, 
+        occupants: result.occupants, 
+        links: vec![],
+    })
 }
 
 // RETURN all rooms from dormitory with dorm_id
