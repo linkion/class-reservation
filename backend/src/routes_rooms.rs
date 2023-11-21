@@ -1,4 +1,3 @@
-use backend::models::{NewClass, Class};
 use backend::*;
 use rocket::{State, route, Route};
 use rocket::form::Form;
@@ -7,7 +6,45 @@ use diesel::{prelude::*, result};
 use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
 use rocket::tokio::select;
 
-#[get("/classes/<id>")]
+// CREATE new room at given dormitory (dorm_id)
+#[post("/rooms/<dorm_id>")]
+fn post_room(dorm_id: i32) -> Json<RoomJsonRet> {
+    todo!()
+}
+
+// RETURN all rooms from dormitory with dorm_id
+#[get("/rooms/<dorm_id>")]
+fn get_room(dorm_id: i32) -> Json<RoomJsonRet> {
+    todo!()
+}
+
+// UPDATE will be in routes_rooms_reservation.rs
+
+// DELETE room given dorm_id and room_id
+#[delete["/rooms/<dorm_id>/<room_number>"]]
+fn delete_room(dorm_id: i32, room_number: i32) -> Json<RoomJsonRet> {
+    todo!()
+}
+
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
+struct RoomJsonRet {
+    id: i32,
+    room_number: i32,
+    max_occupants: i32,
+    occupants: i32,
+    links: Vec<LinkJson>,
+}
+
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
+pub struct LinkJson {
+    href: String,
+    rel: String,
+    method: rocket::http::Method,
+}
+
+/*#[get("/classes/<id>")]
 fn get_class(id: i32) -> Json<ClassJsonRet> {
   use backend::schema::classes::dsl::classes;
 
@@ -94,15 +131,7 @@ pub struct ClassJsonRet {
     pub teacher_name: Option<String>,
     pub links: Vec<LinkJson>,
 }
-
-#[derive(Serialize)]
-#[serde(crate = "rocket::serde")]
-pub struct LinkJson {
-    href: String,
-    rel: String,
-    method: rocket::http::Method,
-}
-
+*/
 pub fn routes() -> Vec<Route> {
-  routes![get_class, get_classes, post_class, post_class_json]
+  routes![post_room, get_room, delete_room]
 }

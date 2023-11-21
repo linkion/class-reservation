@@ -1,28 +1,33 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    classes (id) {
+    dormitories (id) {
         id -> Int4,
-        class_name -> Varchar,
-        max_students -> Int4,
-        registered_students -> Int4,
-        subject_code -> Varchar,
-        course_number -> Int4,
-        teacher_name -> Nullable<Varchar>,
+        dorm_name -> Varchar,
+        dorm_group -> Varchar,
     }
 }
 
 diesel::table! {
-    classes_students (class_id, student_id) {
-        class_id -> Int4,
+    dormitories_rooms (dorm_id, room_id) {
+        dorm_id -> Int4,
+        room_id -> Int4,
+    }
+}
+
+diesel::table! {
+    rooms (id) {
+        id -> Int4,
+        room_number -> Int4,
+        max_occupants -> Int4,
+        occupants -> Int4,
+    }
+}
+
+diesel::table! {
+    rooms_students (room_id, student_id) {
+        room_id -> Int4,
         student_id -> Int4,
-    }
-}
-
-diesel::table! {
-    classes_teachers (class_id, teacher_id) {
-        class_id -> Int4,
-        teacher_id -> Int4,
     }
 }
 
@@ -35,25 +40,15 @@ diesel::table! {
     }
 }
 
-diesel::table! {
-    teachers (id) {
-        id -> Int4,
-        first_name -> Varchar,
-        last_name -> Varchar,
-        middle_name -> Nullable<Varchar>,
-        email -> Nullable<Varchar>,
-    }
-}
-
-diesel::joinable!(classes_students -> classes (class_id));
-diesel::joinable!(classes_students -> students (student_id));
-diesel::joinable!(classes_teachers -> classes (class_id));
-diesel::joinable!(classes_teachers -> teachers (teacher_id));
+diesel::joinable!(dormitories_rooms -> dormitories (dorm_id));
+diesel::joinable!(dormitories_rooms -> rooms (room_id));
+diesel::joinable!(rooms_students -> rooms (room_id));
+diesel::joinable!(rooms_students -> students (student_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
-    classes,
-    classes_students,
-    classes_teachers,
+    dormitories,
+    dormitories_rooms,
+    rooms,
+    rooms_students,
     students,
-    teachers,
 );
