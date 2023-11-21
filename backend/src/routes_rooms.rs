@@ -48,7 +48,19 @@ fn post_room_json(dorm_id: i32, form_input: Json<RoomInput>) -> Json<RoomJsonRet
 // RETURN all rooms from dormitory with dorm_id
 #[get("/rooms/<dorm_id>")]
 fn get_room(dorm_id: i32) -> Json<RoomJsonRet> {
-    todo!()
+    use backend::schema::rooms::dsl::rooms;
+
+    let connection = &mut establish_connection();
+
+    let result: Room = rooms.find(dorm_id).select(Room::as_select()).first(connection).expect("room not found");
+
+    Json(RoomJsonRet { 
+        id: result.id, 
+        room_number: result.room_number, 
+        max_occupants: result.max_occupants, 
+        occupants: result.occupants, 
+        links: vec![],
+    })
 }
 
 // UPDATE will be in routes_rooms_reservation.rs
