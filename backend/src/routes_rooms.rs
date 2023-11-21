@@ -1,4 +1,5 @@
 use backend::*;
+use backend::models::{NewRoom, Room};
 use rocket::{State, route, Route};
 use rocket::form::Form;
 use rocket::serde::{json::Json, Serialize, Deserialize};
@@ -45,14 +46,14 @@ fn post_room_json(dorm_id: i32, form_input: Json<RoomInput>) -> Json<RoomJsonRet
     })
 }
 
-// RETURN all rooms from dormitory with dorm_id
-#[get("/rooms/<dorm_id>")]
-fn get_room(dorm_id: i32) -> Json<RoomJsonRet> {
+// RETURN single room with room_id
+#[get("/rooms/<room_id>")]
+fn get_room(room_id: i32) -> Json<RoomJsonRet> {
     use backend::schema::rooms::dsl::rooms;
 
     let connection = &mut establish_connection();
 
-    let result: Room = rooms.find(dorm_id).select(Room::as_select()).first(connection).expect("room not found");
+    let result: Room = rooms.find(room_id).select(Room::as_select()).first(connection).expect("room not found");
 
     Json(RoomJsonRet { 
         id: result.id, 
@@ -87,6 +88,14 @@ pub struct LinkJson {
     href: String,
     rel: String,
     method: rocket::http::Method,
+}
+
+#[derive(Deserialize)]
+#[serde(crate = "rocket::serde")]
+#[derive(FromForm)]
+struct RoomInput {
+    room_number: i32,
+    max_occupants: i32,
 }
 
 /*#[get("/classes/<id>")]
