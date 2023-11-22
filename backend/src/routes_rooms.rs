@@ -1,5 +1,5 @@
 use backend::*;
-use backend::models::{NewRoom, Room, DormGroups, DormitoriesRooms};
+use backend::models::{NewRoom, Room, DormitoriesRooms};
 use rocket::Route;
 use rocket::form::Form;
 use rocket::serde::{json::Json, Serialize, Deserialize};

@@ -1,5 +1,4 @@
 use super::rocket;
-use super::*;
 use rocket::local::blocking::Client;
 use rocket::http::Status;
 
