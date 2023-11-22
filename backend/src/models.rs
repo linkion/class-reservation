@@ -67,6 +67,13 @@ pub struct RoomsStudent {
 }
 
 #[derive(Insertable)]
+#[diesel(table_name = dormitories)]
+pub struct NewDorm<'a> {
+    pub dorm_name: &'a str,
+    pub dorm_group: &'a str,
+}
+
+#[derive(Insertable)]
 #[diesel(table_name = rooms)]
 pub struct NewRoom<'a> {
     pub room_number: &'a i32,
