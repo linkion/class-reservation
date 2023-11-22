@@ -36,7 +36,7 @@ fn get_student(id: i32) -> Json<StudentJsonRet> {
   use backend::schema::students::dsl::students;
 
   let connection = &mut establish_connection();
-  let student: Student = students.find(id).select(Student::as_select()).first(connection).expect("class not found");
+  let student: Student = students.find(id).select(Student::as_select()).first(connection).expect("student not found");
 
   Json(StudentJsonRet { id, first_name: student.first_name, middle_name: student.middle_name, last_name: student.last_name, links: vec![] })
 }
