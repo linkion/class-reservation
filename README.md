@@ -1,4 +1,4 @@
-# Rust Class Reservation Interface/Server
+# Rust Dorm Reservation Interface/Server
 CS128H Final Project
 
 Group: Milo & Patrick
