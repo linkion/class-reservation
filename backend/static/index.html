@@ -10,16 +10,28 @@
   </head>
   <body>
     <main>
-        <h1>Welcome to the backend of Class Reservations</h1>  
-        <form action="http://localhost:8081/classes" method="POST">
-          <label for="cname">Class name:</label><br>
-          <input type="text" id="cname" name="name"><br>
-          <label for="mstudents">Max students:</label><br>
-          <input type="text" id="mstudents" name="max_students"><br>
-          <label for="scode">Subject code:</label><br>
-          <input type="text" id="scode" name="subject_code"><br>
-          <label for="cnum">Course number:</label><br>
-          <input type="text" id="cnum" name="course_number"><br>
+        <h1>Welcome to the backend of Dorm Reservations</h1>  
+        <form action="http://localhost:8081/dorms" method="POST">
+          <label for="cname">Dormitory name:</label><br>
+          <input type="text" id="cname" name="dorm_name"><br>
+          <select id="group_dropdown" name="dorm_group">
+            <option value="UrbanaNorth">Urbana North</option>
+            <option value="UrbanaSouth">Urbana South</option>
+            <option value="IkenberryCommonsNorth">Ikenberry Commons North</option>
+            <option value="IkenberryCommonsSouth">Ikenberry Commons South</option>
+          </select>
+          <input type="submit" value="Submit">
+        </form>
+        <br>
+        <br>
+        <br>
+        <form action="http://localhost:8081/rooms" method="POST">
+          <label for="cname">Room number:</label><br>
+          <input type="text" id="cname" name="room_number"><br>
+          <label for="mstudents">Max occupants:</label><br>
+          <input type="text" id="mstudents" name="max_occupants"><br>
+          <label for="scode">dorm_id:</label><br>
+          <input type="text" id="scode" name="dorm_id"><br>
           <input type="submit" value="Submit">
         </form>
     </main>
