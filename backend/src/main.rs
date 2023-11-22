@@ -4,6 +4,8 @@ use rocket::fs::NamedFile;
 #[macro_use] extern crate rocket;
 mod routes_rooms;
 mod routes_students;
+mod routes_dorms;
+mod routes_rooms_reservation;
 
 #[get("/")]
 async fn index() -> NamedFile {
@@ -16,5 +18,6 @@ fn rocket() -> _ {
         .mount("/", routes![index])
         .mount("/", routes_rooms::routes())
         .mount("/", routes_students::routes())
+        .mount("/", routes_dorms::routes())
 }
 
