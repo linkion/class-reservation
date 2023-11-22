@@ -4,8 +4,6 @@ use rocket::{State, route, Route};
 use rocket::form::Form;
 use rocket::serde::{json::Json, Serialize, Deserialize};
 use diesel::{prelude::*, result};
-use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
-use rocket::tokio::select;
 
 // CREATE
 #[post("/dorms", data="<form_input>", rank=0)]
@@ -65,8 +63,8 @@ fn get_all_dorms() -> Json<Vec<DormJsonRet>> {
 
   let mut results_json: Vec<DormJsonRet> = vec![];
 
-  for (i, item) in results.iter().enumerate() {
-    let mut new_dorm_json = DormJsonRet { id: item.id, dorm_name: item.dorm_name.clone(), dorm_group: item.dorm_group.clone(), links: vec![] };
+  for item in results.iter() {
+    let new_dorm_json = DormJsonRet { id: item.id, dorm_name: item.dorm_name.clone(), dorm_group: item.dorm_group.clone(), links: vec![] };
     results_json.push(new_dorm_json);
   }
 
