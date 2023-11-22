@@ -16,7 +16,7 @@ pub enum DormGroups {
 #[derive(Queryable, Selectable, Identifiable, PartialEq, Debug, Clone)]
 #[diesel(table_name = dormitories)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
-pub struct Dormitory {
+pub struct Dorm {
     pub id: i32,
     pub dorm_name: String,
     pub dorm_group: String,
@@ -56,12 +56,23 @@ pub struct Student {
 }
 
 #[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
+#[diesel(belongs_to(Dorm))]
+#[diesel(belongs_to(Room))]
+#[diesel(table_name = dormitories_rooms)]
+#[derive(Insertable)]
+#[diesel(primary_key(dorm_id, room_id))]
+pub struct DormitoriesRooms {
+    pub dorm_id: i32,
+    pub room_id: i32,
+}
+
+#[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
 #[diesel(belongs_to(Room))]
 #[diesel(belongs_to(Student))]
 #[diesel(table_name = rooms_students)]
 #[derive(Insertable)]
 #[diesel(primary_key(room_id, student_id))]
-pub struct RoomsStudent {
+pub struct RoomsStudents {
     pub room_id: i32,
     pub student_id: i32,
 }
