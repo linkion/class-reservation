@@ -67,6 +67,24 @@ fn get_room(room_id: i32) -> Json<RoomJsonRet> {
     })
 }
 
+#[get("/rooms")]
+fn get_all_rooms() -> Json<Vec<RoomJsonRet>> {
+  use backend::schema::rooms::dsl::*;
+
+  let connection = &mut establish_connection();
+
+  let results = rooms.select(Room::as_select()).load(connection).expect("failed to load dorms");
+
+  let mut results_json: Vec<RoomJsonRet> = vec![];
+
+  for item in results.iter() {
+    let new_dorm_json = RoomJsonRet { id: item.id, room_number: item.room_number, max_occupants: item.max_occupants, occupants: item.occupants, links: vec![] };
+    results_json.push(new_dorm_json);
+  }
+
+  Json(results_json)
+}
+
 // UPDATE will be in routes_rooms_reservation.rs
 
 // DELETE room given dorm_id and room_id
@@ -103,5 +121,5 @@ struct RoomInput {
 }
 
 pub fn routes() -> Vec<Route> {
-  routes![post_room, post_room_json, get_room, delete_room]
+  routes![post_room, post_room_json, get_room, get_all_rooms, delete_room]
 }
