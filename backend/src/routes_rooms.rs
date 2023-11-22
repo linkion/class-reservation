@@ -1,14 +1,15 @@
 use backend::*;
-use backend::models::{NewRoom, Room};
+use backend::models::{NewRoom, Room, DormGroups, DormitoriesRooms};
 use rocket::Route;
 use rocket::form::Form;
 use rocket::serde::{json::Json, Serialize, Deserialize};
 use diesel::prelude::*;
 
 // CREATE new room at given dormitory (dorm_id)
-#[post("/rooms/<dorm_id>", data="<form_input>", rank=0)]
-fn post_room(dorm_id: i32, form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
+#[post("/rooms", data="<form_input>", rank=0)]
+fn post_room(form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
     use backend::schema::rooms;
+    use backend::schema::dormitories_rooms;
 
     let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants, occupants: &0 };
 
@@ -16,6 +17,10 @@ fn post_room(dorm_id: i32, form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
 
     let result: Room = diesel::insert_into(rooms::table).values(new_room).returning(Room::as_returning()).get_result(connection).expect("failed to insert room");
     
+    let dorm_room_link = DormitoriesRooms { dorm_id: form_input.dorm_id, room_id: result.id };
+
+    let _ = diesel::insert_into(dormitories_rooms::table).values(dorm_room_link).execute(connection).expect("failed to link dorm with new room");
+
     Json(RoomJsonRet { 
         id: result.id, 
         room_number: result.room_number, 
@@ -25,8 +30,8 @@ fn post_room(dorm_id: i32, form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
     })
 }
 
-#[post("/rooms/<dorm_id>", data="<form_input>", rank=1)]
-fn post_room_json(dorm_id: i32, form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
+#[post("/rooms", data="<form_input>", rank=1)]
+fn post_room_json(form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
     use backend::schema::rooms;
 
     let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants, occupants: &0 };
@@ -45,7 +50,7 @@ fn post_room_json(dorm_id: i32, form_input: Json<RoomInput>) -> Json<RoomJsonRet
 }
 
 // RETURN single room with room_id
-#[get("/rooms/<room_id>")]
+#[get("/rooms/<room_id>", rank=0)]
 fn get_room(room_id: i32) -> Json<RoomJsonRet> {
     use backend::schema::rooms::dsl::rooms;
 
@@ -94,6 +99,7 @@ pub struct LinkJson {
 struct RoomInput {
     room_number: i32,
     max_occupants: i32,
+    dorm_id: i32,
 }
 
 /*#[get("/classes/<id>")]
@@ -185,5 +191,5 @@ pub struct ClassJsonRet {
 }
 */
 pub fn routes() -> Vec<Route> {
-  routes![post_room, get_room, delete_room]
+  routes![post_room, post_room_json, get_room, delete_room]
 }
