@@ -2,13 +2,13 @@ use diesel::prelude::*;
 
 use crate::schema::*;
 
-use rocket::{serde::Serialize, form::FromForm};
+use rocket::serde::Serialize;
 
 pub enum DormGroups {
-    urbana_north,
-    urbana_south,
-    ikenberry_commons_north,
-    ikenberry_commons_south,
+    UrbanaNorth,
+    UrbanaSouth,
+    IkenberryCommonsNorth,
+    IkenberryCommonsSouth,
 }
 
 #[derive(Serialize)]

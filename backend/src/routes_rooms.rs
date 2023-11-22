@@ -1,11 +1,9 @@
 use backend::*;
 use backend::models::{NewRoom, Room};
-use rocket::{State, route, Route};
+use rocket::Route;
 use rocket::form::Form;
 use rocket::serde::{json::Json, Serialize, Deserialize};
-use diesel::{prelude::*, result};
-use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
-use rocket::tokio::select;
+use diesel::prelude::*;
 
 // CREATE new room at given dormitory (dorm_id)
 #[post("/rooms/<dorm_id>", data="<form_input>", rank=0)]

@@ -1,11 +1,8 @@
 use backend::models::{Student, NewStudent};
 use backend::*;
-use rocket::{State, route, Route};
-use rocket::form::Form;
+use rocket::Route;
 use rocket::serde::{json::Json, Serialize, Deserialize};
-use diesel::{prelude::*, result};
-use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
-use rocket::tokio::select;
+use diesel::prelude::*;
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
