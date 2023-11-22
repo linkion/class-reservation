@@ -19,5 +19,6 @@ fn rocket() -> _ {
         .mount("/", routes_rooms::routes())
         .mount("/", routes_students::routes())
         .mount("/", routes_dorms::routes())
+        .mount("/", routes_rooms_reservation::routes())
 }
 
