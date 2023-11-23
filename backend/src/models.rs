@@ -77,6 +77,28 @@ pub struct RoomsStudents {
     pub student_id: i32,
 }
 
+#[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
+#[diesel(belongs_to(Room))]
+#[diesel(belongs_to(Student))]
+#[diesel(table_name = rooms_students_holds)]
+#[derive(Insertable)]
+#[diesel(primary_key(room_id, student_id))]
+pub struct RoomsStudentsHolds {
+    pub room_id: i32,
+    pub student_id: i32,
+}
+
+#[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
+#[diesel(belongs_to(Room))]
+#[diesel(belongs_to(Student))]
+#[diesel(table_name = rooms_students_reservations)]
+#[derive(Insertable)]
+#[diesel(primary_key(room_id, student_id))]
+pub struct RoomsStudentsReservations {
+    pub room_id: i32,
+    pub student_id: i32,
+}
+
 #[derive(Insertable)]
 #[diesel(table_name = dormitories)]
 pub struct NewDorm<'a> {
