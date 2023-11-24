@@ -12,17 +12,17 @@ fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
 
   let connection = &mut establish_connection();
 
-  let room: Option<Room> = rooms.find(room_id).select(Room::as_select()).first(connection).optional().expect("failed to access rooms table");
-
-  let holders: Vec<Student> = match room.clone() {
-    Some(v) => RoomsStudentsHolds::belonging_to(&v).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room"),
-    None => vec![],
+  let room: Room = match rooms.find(room_id)
+                              .select(Room::as_select())
+                              .first(connection)
+                              .optional().expect("failed to access rooms table") {
+    Some(v) => v,
+    None => return Status::BadRequest,
   };
 
-  let reservers: Vec<Student> = match room {
-    Some(v) => RoomsStudentsReservations::belonging_to(&v).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room"),
-    None => vec![],
-  };
+  let holders: Vec<Student> = RoomsStudentsHolds::belonging_to(&room).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room");
+
+  let reservers: Vec<Student> = RoomsStudentsReservations::belonging_to(&room).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room");
 
   if holders.is_empty() && reservers.is_empty() {
       diesel::insert_into(rooms_students_holds::table).values(RoomsStudentsHolds {room_id, student_id}).execute(connection).expect("failed to create new hold");
@@ -43,30 +43,33 @@ fn put_reserve_room(form_input: Json<RoomStateInput>) -> Status {
 
   let connection = &mut establish_connection();
 
-  let room: Option<Room> = rooms.find(room_id).select(Room::as_select()).first(connection).optional().expect("failed to access rooms table");
-  let student: Option<Student> = students.find(student_id).select(Student::as_select()).first(connection).optional().expect("failed to access students table");
-
-  let holders: Vec<Student> = match room.clone() {
-    Some(v) => RoomsStudentsHolds::belonging_to(&v).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room"),
-    None => vec![],
-  };
-
-  let reservers: Vec<Student> = match room {
-    Some(v) => RoomsStudentsReservations::belonging_to(&v).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room"),
-    None => vec![],
-  };
-
-  let student_reserving = match student.clone() {
+  let room: Room = match rooms.find(room_id).select(Room::as_select()).first(connection).optional().expect("failed to access rooms table") {
     Some(v) => v,
     None => return Status::BadRequest,
   };
-  
-  if !reservers.is_empty() {
+
+  let student: Student = match students.find(student_id).select(Student::as_select()).first(connection).optional().expect("failed to access students table") {
+    Some(v) => v,
+    None => return Status::BadRequest,
+  };
+
+  let holders: Vec<Student> = RoomsStudentsHolds::belonging_to(&room)
+    .inner_join(students)
+    .select(Student::as_select())
+    .load(connection).expect("failed to load students holding room");
+
+  let reservers: Vec<Student> = RoomsStudentsReservations::belonging_to(&room)
+    .inner_join(students)
+    .select(Student::as_select())
+    .load(connection).expect("failed to load students holding room");
+
+  if reservers.len() >= room.max_occupants as usize || room.occupants >= room.max_occupants {
     return Status::BadRequest;
   }
 
-  if holders.is_empty() || holders.contains(&student_reserving) {
+  if holders.is_empty() || holders.contains(&student) {
     diesel::insert_into(rooms_students_reservations::table).values(RoomsStudentsReservations {room_id, student_id}).execute(connection).expect("failed to create new reservation");
+    diesel::update(&room).set(occupants.eq(occupants + 1)).execute(connection).expect("failed to increment occupant num");
   } else {
     return Status::BadRequest;
   }
@@ -124,6 +127,4 @@ async fn classes_events(queue: &State<Sender<Class>>, mut end: Shutdown) -> Even
         }
     }
 }
-
-
 */
