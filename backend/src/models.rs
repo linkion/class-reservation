@@ -111,7 +111,6 @@ pub struct NewDorm<'a> {
 pub struct NewRoom<'a> {
     pub room_number: &'a i32,
     pub max_occupants: &'a i32,
-    pub occupants: &'a i32,
 }
 
 #[derive(Insertable)]
