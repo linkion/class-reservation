@@ -1,4 +1,5 @@
-use rocket::fs::NamedFile;
+use diesel::{RunQueryDsl, SelectableHelper, connection};
+use rocket::{fs::NamedFile, http::Status};
 
 #[cfg(test)] mod tests;
 #[macro_use] extern crate rocket;
@@ -12,10 +13,60 @@ async fn index() -> NamedFile {
     NamedFile::open("static/index.html").await.expect("index.html not found")
 }
 
+#[post("/reset/data")]
+fn reset_data() -> Status {
+    use backend::models::*;
+    use backend::schema::dormitories::dsl::*;
+    use backend::schema::rooms::dsl::*;
+    use backend::schema::dormitories_rooms::dsl::*;
+    use backend::schema::rooms_students::dsl::*;
+    use backend::schema::rooms_students_holds::dsl::*;
+    use backend::schema::rooms_students_reservations::dsl::*;
+
+
+    let connection = &mut backend::establish_connection();
+
+    diesel::delete(dormitories).execute(connection).expect("failed to delete dorms table");
+    diesel::delete(rooms).execute(connection).expect("failed to delete rooms table");
+    diesel::delete(dormitories_rooms).execute(connection).expect("failed to delete dormitories_rooms table");
+    diesel::delete(rooms_students).execute(connection).expect("failed to delete rooms_students table");
+    diesel::delete(rooms_students_holds).execute(connection).expect("failed to delete rooms_students_holds table");
+    diesel::delete(rooms_students_reservations).execute(connection).expect("failed to delete rooms_students_reservations table");
+
+
+    use csv::{ReaderBuilder, StringRecord};
+
+    let mut rdr = ReaderBuilder::new().from_path("src/dormitories.csv").expect("dormitories.csv not found");
+
+    let records = rdr
+        .records()
+        .collect::<Result<Vec<StringRecord>, csv::Error>>().expect("failure to collect csv rows");
+
+    for item in records.iter() {
+        let new_dorm_name: String = item[0].to_string();
+        let new_dorm_group: String = item[1].trim().to_string();
+        let new_dorm = NewDorm { dorm_name: &new_dorm_name, dorm_group: &new_dorm_group };
+        let result_dorm: Dorm = diesel::insert_into(dormitories).values(new_dorm).get_result(connection).expect("failed to insert new dorm");
+        
+        let new_dorm_id = result_dorm.id;
+        let example_room_nums: Vec<i32> = vec![101,102,103,200,202];
+        for room_num in example_room_nums.iter() {
+            let new_room = NewRoom { room_number: room_num, max_occupants: &2 };
+
+            let result_room: Room = diesel::insert_into(rooms).values(new_room).get_result(connection).expect("failed to insert new room");
+            let new_room_id = result_room.id;
+
+            diesel::insert_into(dormitories_rooms).values(DormitoriesRooms { dorm_id: new_dorm_id, room_id: new_room_id }).execute(connection).expect("failed to link dorm and room");
+        }
+    }
+
+    Status::Ok
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index])
+        .mount("/", routes![index, reset_data])
         .mount("/", routes_rooms::routes())
         .mount("/", routes_students::routes())
         .mount("/", routes_dorms::routes())
