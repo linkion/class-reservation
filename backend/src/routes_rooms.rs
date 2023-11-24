@@ -11,7 +11,7 @@ fn post_room(form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
     use backend::schema::rooms;
     use backend::schema::dormitories_rooms;
 
-    let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants, occupants: &0 };
+    let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants };
 
     let connection = &mut establish_connection();
 
@@ -34,7 +34,7 @@ fn post_room(form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
 fn post_room_json(form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
     use backend::schema::rooms;
 
-    let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants, occupants: &0 };
+    let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants };
 
     let connection = &mut establish_connection();
 
