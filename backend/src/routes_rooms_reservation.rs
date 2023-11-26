@@ -1,12 +1,12 @@
 use diesel::prelude::*;
-use backend::{schema::{rooms_students_holds, rooms_students_reservations}, models::{RoomsStudentsHolds, Room, Student, RoomsStudentsReservations}, establish_connection};
+use backend::{schema::*, models::*, *};
 use rocket::{serde::{json::Json, Serialize, Deserialize}, Route, http::Status};
+use backend::schema::dormitories::dsl::*;
+use backend::schema::rooms::dsl::*;
+use backend::schema::students::dsl::*;
 
 #[put("/rooms/hold", data="<form_input>")]
 fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
-  use backend::schema::rooms::dsl::*;
-  use backend::schema::students::dsl::*;
-
   let room_id = form_input.room_id;
   let student_id = form_input.student_id;
 
@@ -20,12 +20,14 @@ fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
     None => return Status::BadRequest,
   };
 
-  let holders: Vec<Student> = RoomsStudentsHolds::belonging_to(&room).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room");
+  let dorm: Dorm = dormitories_rooms::belonging_to(&room).select(Dorm::as_select()).first(connection).expect("failed to access DormitoriesRooms table");
 
+  let holders: Vec<Student> = RoomsStudentsHolds::belonging_to(&room).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room");
   let reservers: Vec<Student> = RoomsStudentsReservations::belonging_to(&room).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room");
 
   if holders.is_empty() && reservers.is_empty() {
-      diesel::insert_into(rooms_students_holds::table).values(RoomsStudentsHolds {room_id, student_id}).execute(connection).expect("failed to create new hold");
+    diesel::insert_into(rooms_students_holds::table).values(RoomsStudentsHolds {room_id, student_id}).execute(connection).expect("failed to create new hold");
+    diesel::update()
   } else {
     return Status::BadRequest;
   }
@@ -35,9 +37,6 @@ fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
 
 #[put("/rooms/reserve", data="<form_input>")]
 fn put_reserve_room(form_input: Json<RoomStateInput>) -> Status {
-  use backend::schema::rooms::dsl::*;
-  use backend::schema::students::dsl::*;
-
   let room_id = form_input.room_id;
   let student_id = form_input.student_id;
 

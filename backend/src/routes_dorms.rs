@@ -1,9 +1,11 @@
 use backend::*;
-use backend::models::{Dorm, NewDorm};
+use backend::models::{Dorm, NewDorm, DormitoriesRooms};
+use backend::schema::dormitories;
 use rocket::Route;
 use rocket::form::Form;
+use rocket::http::Status;
 use rocket::serde::{json::Json, Serialize, Deserialize};
-use diesel::prelude::*;
+use diesel::{prelude::*, BelongingToDsl};
 
 // CREATE
 #[post("/dorms", data="<form_input>", rank=0)]
