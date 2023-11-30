@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 serde = "1.0.192"
-yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
-gloo-net = "0.2"
+yew = { version = "0.21", features = ["csr"] }
+gloo-net = "0.4"
 wasm-bindgen-futures = "0.4"
+yew-bootstrap = "0.8"
