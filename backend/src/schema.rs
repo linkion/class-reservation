@@ -5,6 +5,8 @@ diesel::table! {
         id -> Int4,
         dorm_name -> Varchar,
         dorm_group -> Varchar,
+        rooms -> Int4,
+        rooms_available -> Int4,
     }
 }
 

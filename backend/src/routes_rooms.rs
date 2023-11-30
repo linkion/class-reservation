@@ -1,5 +1,5 @@
 use backend::*;
-use backend::models::{NewRoom, Room, DormitoriesRooms};
+use backend::models::*;
 use rocket::Route;
 use rocket::form::Form;
 use rocket::serde::{json::Json, Serialize, Deserialize};
@@ -8,43 +8,56 @@ use diesel::prelude::*;
 // CREATE new room at given dormitory (dorm_id)
 #[post("/rooms", data="<form_input>", rank=0)]
 fn post_room(form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
-    use backend::schema::rooms;
-    use backend::schema::dormitories_rooms;
+    use backend::schema::dormitories::dsl::*;
+    use backend::schema::dormitories_rooms::dsl::*;
 
     let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants };
 
     let connection = &mut establish_connection();
 
-    let result: Room = diesel::insert_into(rooms::table).values(new_room).returning(Room::as_returning()).get_result(connection).expect("failed to insert room");
+    let new_room_ret: Room = diesel::insert_into(backend::schema::rooms::table).values(new_room).returning(Room::as_returning()).get_result(connection).expect("failed to insert room");
     
-    let dorm_room_link = DormitoriesRooms { dorm_id: form_input.dorm_id, room_id: result.id };
+    let dorm_room_link = DormitoriesRooms { dorm_id: form_input.dorm_id, room_id: new_room_ret.id };
+    let dorm: Dorm = dormitories.find(form_input.dorm_id).select(Dorm::as_select()).first(connection).expect("failed to find dorm");
 
-    let _ = diesel::insert_into(dormitories_rooms::table).values(dorm_room_link).execute(connection).expect("failed to link dorm with new room");
+    diesel::insert_into(dormitories_rooms).values(dorm_room_link).execute(connection).expect("failed to link dorm with new room");
+
+    diesel::update(&dorm).set(rooms_available.eq(rooms_available + 1)).execute(connection).expect("failed to update dorm with new room");
+    diesel::update(&dorm).set(rooms.eq(rooms + 1)).execute(connection).expect("failed to update dorm with new room");
 
     Json(RoomJsonRet { 
-        id: result.id, 
-        room_number: result.room_number, 
-        max_occupants: result.max_occupants, 
-        occupants: result.occupants, 
+        id: new_room_ret.id, 
+        room_number: new_room_ret.room_number, 
+        max_occupants: new_room_ret.max_occupants, 
+        occupants: new_room_ret.occupants, 
         links: vec![],
     })
 }
 
 #[post("/rooms", data="<form_input>", rank=1)]
 fn post_room_json(form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
-    use backend::schema::rooms;
+    use backend::schema::dormitories::dsl::*;
+    use backend::schema::dormitories_rooms::dsl::*;
 
     let new_room = NewRoom { room_number: &form_input.room_number, max_occupants: &form_input.max_occupants };
 
     let connection = &mut establish_connection();
 
-    let result: Room = diesel::insert_into(rooms::table).values(new_room).returning(Room::as_returning()).get_result(connection).expect("failed to insert room");
+    let new_room_ret: Room = diesel::insert_into(backend::schema::rooms::table).values(new_room).returning(Room::as_returning()).get_result(connection).expect("failed to insert room");
     
+    let dorm_room_link = DormitoriesRooms { dorm_id: form_input.dorm_id, room_id: new_room_ret.id };
+    let dorm: Dorm = dormitories.find(form_input.dorm_id).select(Dorm::as_select()).first(connection).expect("failed to find dorm");
+
+    diesel::insert_into(dormitories_rooms).values(dorm_room_link).execute(connection).expect("failed to link dorm with new room");
+
+    diesel::update(&dorm).set(rooms_available.eq(rooms_available + 1)).execute(connection).expect("failed to update dorm with new room");
+    diesel::update(&dorm).set(rooms.eq(rooms + 1)).execute(connection).expect("failed to update dorm with new room");
+
     Json(RoomJsonRet { 
-        id: result.id, 
-        room_number: result.room_number, 
-        max_occupants: result.max_occupants, 
-        occupants: result.occupants, 
+        id: new_room_ret.id, 
+        room_number: new_room_ret.room_number, 
+        max_occupants: new_room_ret.max_occupants, 
+        occupants: new_room_ret.occupants, 
         links: vec![],
     })
 }

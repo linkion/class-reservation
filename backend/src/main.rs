@@ -27,7 +27,7 @@ fn reset_data() -> Status {
     let connection = &mut backend::establish_connection();
 
     diesel::delete(dormitories).execute(connection).expect("failed to delete dorms table");
-    diesel::delete(rooms).execute(connection).expect("failed to delete rooms table");
+    diesel::delete(backend::schema::rooms::table).execute(connection).expect("failed to delete rooms table");
     diesel::delete(dormitories_rooms).execute(connection).expect("failed to delete dormitories_rooms table");
     diesel::delete(rooms_students).execute(connection).expect("failed to delete rooms_students table");
     diesel::delete(rooms_students_holds).execute(connection).expect("failed to delete rooms_students_holds table");
@@ -46,14 +46,14 @@ fn reset_data() -> Status {
         let new_dorm_name: String = item[0].to_string();
         let new_dorm_group: String = item[1].trim().to_string();
         let new_dorm = NewDorm { dorm_name: &new_dorm_name, dorm_group: &new_dorm_group };
-        let result_dorm: Dorm = diesel::insert_into(dormitories).values(new_dorm).get_result(connection).expect("failed to insert new dorm");
+        let result_dorm: Dorm = diesel::insert_into(dormitories).values(new_dorm).returning(Dorm::as_returning()).get_result(connection).expect("failed to insert new dorm");
         
         let new_dorm_id = result_dorm.id;
         let example_room_nums: Vec<i32> = vec![101,102,103,200,202];
         for room_num in example_room_nums.iter() {
             let new_room = NewRoom { room_number: room_num, max_occupants: &2 };
 
-            let result_room: Room = diesel::insert_into(rooms).values(new_room).get_result(connection).expect("failed to insert new room");
+            let result_room: Room = diesel::insert_into(backend::schema::rooms::table).values(new_room).get_result(connection).expect("failed to insert new room");
             let new_room_id = result_room.id;
 
             diesel::insert_into(dormitories_rooms).values(DormitoriesRooms { dorm_id: new_dorm_id, room_id: new_room_id }).execute(connection).expect("failed to link dorm and room");

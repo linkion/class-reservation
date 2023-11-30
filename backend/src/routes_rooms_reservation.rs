@@ -1,18 +1,19 @@
 use diesel::prelude::*;
-use backend::{schema::*, models::*, *};
+use backend::{models::*, *};
 use rocket::{serde::{json::Json, Serialize, Deserialize}, Route, http::Status};
-use backend::schema::dormitories::dsl::*;
-use backend::schema::rooms::dsl::*;
-use backend::schema::students::dsl::*;
+use rocket::form::FromForm;
 
 #[put("/rooms/hold", data="<form_input>")]
 fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
-  let room_id = form_input.room_id;
+  use backend::schema::dormitories::dsl::*;
+  use backend::schema::dormitories_rooms::dsl::*;
+  use backend::schema::students::dsl::*;
+  let select_room_id = form_input.room_id;
   let student_id = form_input.student_id;
 
   let connection = &mut establish_connection();
 
-  let room: Room = match rooms.find(room_id)
+  let room: Room = match backend::schema::rooms::table.find(select_room_id)
                               .select(Room::as_select())
                               .first(connection)
                               .optional().expect("failed to access rooms table") {
@@ -20,14 +21,13 @@ fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
     None => return Status::BadRequest,
   };
 
-  let dorm: Dorm = dormitories_rooms::belonging_to(&room).select(Dorm::as_select()).first(connection).expect("failed to access DormitoriesRooms table");
+  let dorm: Dorm = DormitoriesRooms::belonging_to(&room).inner_join(dormitories).select(Dorm::as_select()).first(connection).expect("failed to access DormitoriesRooms table");
 
   let holders: Vec<Student> = RoomsStudentsHolds::belonging_to(&room).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room");
   let reservers: Vec<Student> = RoomsStudentsReservations::belonging_to(&room).inner_join(students).select(Student::as_select()).load(connection).expect("failed to load students holding room");
 
   if holders.is_empty() && reservers.is_empty() {
-    diesel::insert_into(rooms_students_holds::table).values(RoomsStudentsHolds {room_id, student_id}).execute(connection).expect("failed to create new hold");
-    diesel::update()
+    diesel::insert_into(schema::rooms_students_holds::table).values(RoomsStudentsHolds { room_id: select_room_id, student_id}).execute(connection).expect("failed to create new hold");
   } else {
     return Status::BadRequest;
   }
@@ -37,12 +37,15 @@ fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
 
 #[put("/rooms/reserve", data="<form_input>")]
 fn put_reserve_room(form_input: Json<RoomStateInput>) -> Status {
-  let room_id = form_input.room_id;
+  use backend::schema::dormitories::dsl::*;
+  use backend::schema::dormitories_rooms::dsl::*;
+  use backend::schema::students::dsl::*;
+  let select_room_id = form_input.room_id;
   let student_id = form_input.student_id;
 
   let connection = &mut establish_connection();
 
-  let room: Room = match rooms.find(room_id).select(Room::as_select()).first(connection).optional().expect("failed to access rooms table") {
+  let room: Room = match backend::schema::rooms::table.find(select_room_id).select(Room::as_select()).first(connection).optional().expect("failed to access rooms table") {
     Some(v) => v,
     None => return Status::BadRequest,
   };
@@ -67,8 +70,8 @@ fn put_reserve_room(form_input: Json<RoomStateInput>) -> Status {
   }
 
   if holders.is_empty() || holders.contains(&student) {
-    diesel::insert_into(rooms_students_reservations::table).values(RoomsStudentsReservations {room_id, student_id}).execute(connection).expect("failed to create new reservation");
-    diesel::update(&room).set(occupants.eq(occupants + 1)).execute(connection).expect("failed to increment occupant num");
+    diesel::insert_into(schema::rooms_students_reservations::table).values(RoomsStudentsReservations { room_id: select_room_id, student_id}).execute(connection).expect("failed to create new reservation");
+    diesel::update(&room).set(schema::rooms::occupants.eq(schema::rooms::occupants + 1)).execute(connection).expect("failed to increment occupant num");
   } else {
     return Status::BadRequest;
   }

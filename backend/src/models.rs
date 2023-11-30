@@ -20,6 +20,8 @@ pub struct Dorm {
     pub id: i32,
     pub dorm_name: String,
     pub dorm_group: String,
+    pub rooms: i32,
+    pub rooms_available: i32,
 }
 
 /*
