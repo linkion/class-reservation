@@ -36,13 +36,28 @@ pub fn DormList() -> Html {
         });
     }
 
-    let dorms : Vec<DormJSON> = dorms_json.to_vec();
+    let urbana_north_dorms : Vec<DormJSON> = dorms_json.to_vec();
+    let urbana_south_dorms : Vec<DormJSON> = dorms_json.to_vec();
+    let ikenberry_commons_north_dorms : Vec<DormJSON> = dorms_json.to_vec();
+    let ikenberry_commons_south_dorms : Vec<DormJSON> = dorms_json.to_vec();
 
-    let dorms = dorms.iter().map(|dorm| html! {
-        <p key={dorm.id}>{format!("{} . . . . . . {}", dorm.dorm_name, dorm.dorm_group)}</p>
+
+    let urbana_north_dorms = urbana_north_dorms.iter().map(|dorm| html! {
+      <>
+        <Card class="w-25">
+          <CardTitle>{dorm.dorm_name.clone()}</CardTitle>
+        </Card>
+      </>
     }).collect::<Html>();
 
     html! {
-        {dorms}
+      <>
+      <h2>{"Urbana North"}</h2>
+      <Row class="g-4">
+        <Column>
+          {urbana_north_dorms}
+        </Column>
+      </Row>
+      </>
     }
 }
