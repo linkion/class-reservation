@@ -23,28 +23,21 @@ fn app() -> Html {
         callback_view.set(CurrentView::Rooms(dorm_id));
     });
     
-    match *view {
-        CurrentView::Dorms => return html! {
-            <>
-                {include_cdn()}
-                <h1>{ "UIUC Class Reservation" }</h1>
-                <div>
-                    <DormList on_click={on_click_dorm} />
-                </div>
-                {include_cdn_js()}
-            </>
-        },
-        CurrentView::Rooms(dorm_id) => return html! {
-            <>
-                {include_cdn()}
-                <h1>{ "UIUC Class Reservation" }</h1>
-                <div>
-                    <RoomList dorm_id={dorm_id} />
-                </div>
-                {include_cdn_js()}
-            </>
-        },
+    let view_html = match *view {
+        CurrentView::Dorms => html!(<DormList on_click={on_click_dorm} />),
+        CurrentView::Rooms(dorm_id) => html!(<RoomList dorm_id={dorm_id} />),
     };
+
+    html! {
+      <>
+          {include_cdn()}
+          <h1>{ "UIUC Dorm Reservation" }</h1>
+          <div>
+              {view_html}
+          </div>
+          {include_cdn_js()}
+      </>
+  }
 }
 
 fn main() {
