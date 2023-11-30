@@ -1,7 +1,9 @@
 use yew::prelude::*;
+use yew::{function_component, html, Html, Callback};
 use serde::Deserialize;
 use gloo_net::http::Request;
 
+use crate::CurrentView;
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct DormJSON {
@@ -12,8 +14,13 @@ pub struct DormJSON {
     pub rooms_available: i32,
 }
 
+#[derive(Properties, PartialEq)]
+pub struct Props {
+  pub on_click: Callback<i32>,
+}
+
 #[function_component]
-pub fn DormList() -> Html {
+pub fn DormList(Props { on_click }: &Props) -> Html {
     let dorms_json = use_state(|| vec![]);
     {
         let dorms_json = dorms_json.clone();
@@ -38,53 +45,96 @@ pub fn DormList() -> Html {
     let ikenberry_commons_north_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "IkenberryCommonsNorth").cloned().collect();
     let ikenberry_commons_south_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "IkenberryCommonsSouth").cloned().collect();
 
+    let urbana_north_dorms = urbana_north_dorms.iter().map(|dorm| {
+      let on_card_select = {
+        let on_click = on_click.clone();
+        let dorm = dorm.clone();
+        Callback::from(move |_| {
+          on_click.emit(dorm.id);
+        })
+      };
 
-    let urbana_north_dorms = urbana_north_dorms.iter().map(|dorm| html_nested! {
+      html_nested! {
       <>
         <div class="col-sm-2">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+              <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
             </div>
           </div>
         </div>
       </>
-    }).collect::<Vec<_>>();
+    }
+  }).collect::<Vec<_>>();
 
-    let urbana_south_dorms = urbana_south_dorms.iter().map(|dorm| html_nested! {
+    let urbana_south_dorms = urbana_south_dorms.iter().map(|dorm| {
+      let on_card_select = {
+        let on_click = on_click.clone();
+        let dorm = dorm.clone();
+        Callback::from(move |_| {
+          on_click.emit(dorm.id);
+        })
+      };
+
+      html_nested! {
       <>
         <div class="col-sm-2">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+              <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
             </div>
           </div>
         </div>
       </>
-    }).collect::<Vec<_>>();
+    }
+  }).collect::<Vec<_>>();
 
-    let ikenberry_commons_north_dorms = ikenberry_commons_north_dorms.iter().map(|dorm| html_nested! {
+    let ikenberry_commons_north_dorms = ikenberry_commons_north_dorms.iter().map(|dorm| {
+      let on_card_select = {
+        let on_click = on_click.clone();
+        let dorm = dorm.clone();
+        Callback::from(move |_| {
+          on_click.emit(dorm.id);
+        })
+      };
+
+      html_nested! {
       <>
         <div class="col-sm-2">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+              <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
             </div>
           </div>
         </div>
       </>
-    }).collect::<Vec<_>>();
+    }
+  }).collect::<Vec<_>>();
 
-    let ikenberry_commons_south_dorms = ikenberry_commons_south_dorms.iter().map(|dorm| html_nested! {
+    let ikenberry_commons_south_dorms = ikenberry_commons_south_dorms.iter().map(|dorm| {
+      let on_card_select = {
+        let on_click = on_click.clone();
+        let dorm = dorm.clone();
+        Callback::from(move |_| {
+          on_click.emit(dorm.id);
+        })
+      };
+
+      html_nested! {
       <>
         <div class="col-sm-2">
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+              <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
             </div>
           </div>
         </div>
       </>
+      }
     }).collect::<Vec<_>>();
 
     html! {
