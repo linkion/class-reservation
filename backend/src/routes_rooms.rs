@@ -80,6 +80,30 @@ fn get_room(room_id: i32) -> Json<RoomJsonRet> {
     })
 }
 
+// RETURN all rooms within dorm
+#[get("/dorms/<dorm_id>/rooms")]
+fn get_dorm_rooms(dorm_id: i32) -> Json<Vec<RoomJsonRet>> {
+
+
+    let connection = &mut establish_connection();
+
+    let selected_dorm: Dorm = schema::dormitories::table.find(dorm_id).select(Dorm::as_select()).first(connection).expect("failed to find dorm");
+
+    let rooms: Vec<Room> = DormitoriesRooms::belonging_to(&selected_dorm).inner_join(backend::schema::rooms::table).select(Room::as_select()).load(connection).expect("failed to load rooms associated with dorm");
+    let mut return_rooms: Vec<RoomJsonRet> = vec![];
+
+    for iter_room in rooms {
+        let id = iter_room.id;
+        let room_number = iter_room.room_number;
+        let max_occupants = iter_room.max_occupants;
+        let occupants = iter_room.occupants;
+        let links: Vec<LinkJson> = vec![];
+        return_rooms.push(RoomJsonRet { id, room_number, max_occupants, occupants, links });
+    }
+
+    Json(return_rooms)
+}
+
 #[get("/rooms")]
 fn get_all_rooms() -> Json<Vec<RoomJsonRet>> {
   use backend::schema::rooms::dsl::*;
@@ -134,5 +158,5 @@ struct RoomInput {
 }
 
 pub fn routes() -> Vec<Route> {
-  routes![post_room, post_room_json, get_room, get_all_rooms, delete_room]
+  routes![post_room, post_room_json, get_room, get_all_rooms, get_dorm_rooms, delete_room]
 }
