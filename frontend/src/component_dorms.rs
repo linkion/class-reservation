@@ -40,7 +40,7 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     });
   }
 
-  let urbana_north_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|&dorm| dorm.dorm_group == "UrbanaSouth").cloned().collect();
+  let urbana_north_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|&dorm| dorm.dorm_group == "UrbanaNorth").cloned().collect();
   let urbana_south_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "UrbanaSouth").cloned().collect();
   let ikenberry_commons_north_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "IkenberryCommonsNorth").cloned().collect();
   let ikenberry_commons_south_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "IkenberryCommonsSouth").cloned().collect();
@@ -58,9 +58,11 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
+          <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
           <div class="card-body">
             <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
-            <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
+            <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
+            <button onclick={on_card_select} class="stretched-link btn btn-primary">{"See Rooms"}</button>
           </div>
         </div>
       </div>
