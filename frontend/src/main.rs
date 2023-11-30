@@ -12,11 +12,11 @@ fn app() -> Html {
     html! {
         <>
             {include_cdn()}
-            <h1>{ "UIUC Class Reservation" }</h1>
+            <h1>{ "UIUC Dorm Reservation" }</h1>
             <div>
-                <h3>{"Classes: "}</h3>
+                <h3>{"Dorms: "}</h3>
                 <DormList />
-                <button>{"Hi!"}</button>
+                <RoomList dorm_id=1/>
             </div>
             {include_cdn_js()}
         </>
