@@ -51,11 +51,62 @@ pub fn DormList() -> Html {
       </>
     }).collect::<Vec<_>>();
 
+    let urbana_south_dorms = urbana_south_dorms.iter().map(|dorm| html_nested! {
+      <>
+        <div class="col-sm-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+            </div>
+          </div>
+        </div>
+      </>
+    }).collect::<Vec<_>>();
+
+    let ikenberry_commons_north_dorms = ikenberry_commons_north_dorms.iter().map(|dorm| html_nested! {
+      <>
+        <div class="col-sm-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+            </div>
+          </div>
+        </div>
+      </>
+    }).collect::<Vec<_>>();
+
+    let ikenberry_commons_south_dorms = ikenberry_commons_south_dorms.iter().map(|dorm| html_nested! {
+      <>
+        <div class="col-sm-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+            </div>
+          </div>
+        </div>
+      </>
+    }).collect::<Vec<_>>();
+
     html! {
       <>
-      <h2>{"Urbana North"}</h2>
+        <h2>{"Urbana North"}</h2>
         <div class="row">
-            {urbana_north_dorms}
+          {urbana_north_dorms}
+        </div>
+        <br />
+        <h2>{"Urbana South"}</h2>
+        <div class="row">
+          {urbana_south_dorms}
+        </div>
+        <br />
+        <h2>{"Ikenberry Commons North"}</h2>
+        <div class="row">
+          {ikenberry_commons_north_dorms}
+        </div>
+        <br />
+        <h2>{"Ikenberry Commons South"}</h2>
+        <div class="row">
+          {ikenberry_commons_south_dorms}
         </div>
       </>
     }
