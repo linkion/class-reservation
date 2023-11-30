@@ -45,13 +45,13 @@ fn post_dorm_json(form_input: Json<DormInput>) -> Json<DormJsonRet> {
 }
 
 // RETURN
-#[get("/dorms/<id>")]
-fn get_dorm(id: i32) -> Json<DormJsonRet> {
+#[get("/dorms/<dorm_id>")]
+fn get_dorm(dorm_id: i32) -> Json<DormJsonRet> {
   use backend::schema::dormitories::dsl::*;
 
   let connection = &mut establish_connection();
 
-  let result: Dorm = dormitories.find(id).select(Dorm::as_select()).first(connection).expect("failed to find dorm");
+  let result: Dorm = dormitories.find(dorm_id).select(Dorm::as_select()).first(connection).expect("failed to find dorm");
 
   let links: Vec<LinkJson> = vec![];
   Json(DormJsonRet {id:result.id,dorm_name:result.dorm_name.clone(),dorm_group:result.dorm_group.clone(),links, rooms: result.rooms, rooms_available: result.rooms_available })
