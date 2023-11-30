@@ -2,9 +2,6 @@ use yew::prelude::*;
 use serde::Deserialize;
 use gloo_net::http::Request;
 
-use yew_bootstrap::component::*;
-use yew_bootstrap::component::card::*;
-
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct DormJSON {
@@ -42,22 +39,24 @@ pub fn DormList() -> Html {
     let ikenberry_commons_south_dorms : Vec<DormJSON> = dorms_json.to_vec();
 
 
-    let urbana_north_dorms = urbana_north_dorms.iter().map(|dorm| html! {
+    let urbana_north_dorms = urbana_north_dorms.iter().map(|dorm| html_nested! {
       <>
-        <Card class="w-25">
-          <CardTitle>{dorm.dorm_name.clone()}</CardTitle>
-        </Card>
+        <div class="col-sm-2">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+            </div>
+          </div>
+        </div>
       </>
-    }).collect::<Html>();
+    }).collect::<Vec<_>>();
 
     html! {
       <>
       <h2>{"Urbana North"}</h2>
-      <Row class="g-4">
-        <Column>
-          {urbana_north_dorms}
-        </Column>
-      </Row>
+        <div class="row">
+            {urbana_north_dorms}
+        </div>
       </>
     }
 }
