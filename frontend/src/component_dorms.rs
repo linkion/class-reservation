@@ -33,10 +33,10 @@ pub fn DormList() -> Html {
         });
     }
 
-    let urbana_north_dorms : Vec<DormJSON> = dorms_json.to_vec();
-    let urbana_south_dorms : Vec<DormJSON> = dorms_json.to_vec();
-    let ikenberry_commons_north_dorms : Vec<DormJSON> = dorms_json.to_vec();
-    let ikenberry_commons_south_dorms : Vec<DormJSON> = dorms_json.to_vec();
+    let urbana_north_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|&dorm| dorm.dorm_group == "UrbanaSouth").cloned().collect();
+    let urbana_south_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "UrbanaSouth").cloned().collect();
+    let ikenberry_commons_north_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "IkenberryCommonsNorth").cloned().collect();
+    let ikenberry_commons_south_dorms : Vec<DormJSON> = dorms_json.to_vec().iter().filter(|dorm| dorm.dorm_group == "IkenberryCommonsSouth").cloned().collect();
 
 
     let urbana_north_dorms = urbana_north_dorms.iter().map(|dorm| html_nested! {
