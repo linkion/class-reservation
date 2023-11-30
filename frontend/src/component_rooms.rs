@@ -13,7 +13,6 @@ pub struct RoomJSON {
     occupants: i32,
 }
 
-
 #[derive(Properties, PartialEq)]
 pub struct RoomProps {
     pub dorm_id: i32,
@@ -43,11 +42,29 @@ pub fn RoomList(props: &RoomProps) -> Html {
 
     let rooms : Vec<RoomJSON> = rooms_json.to_vec();
 
+    /*
     let rooms = rooms.iter().map(|room| html! {
         <p key={room.id}>{format!("{} . . . . . . {} . . . . . . {}", room.room_number, room.max_occupants, room.occupants)}</p>
     }).collect::<Html>();
+    */
+    let roomsHTML = rooms.iter().map(|room| html_nested! {
+        <>
+          <div class="col-sm-5">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{format!("Room Number: {} . . . Max Occupants: {} . . . Current Occupants: {}", room.room_number,  room.max_occupants, room.occupants)}</h5>
+              </div>
+            </div>
+          </div>
+        </>
+      }).collect::<Vec<_>>();
 
     html! {
-        {rooms}
+        <>
+        <h2>{"Rooms:"}</h2>
+            <div class="row">
+                {roomsHTML}
+            </div>
+        </>
     }
 }
