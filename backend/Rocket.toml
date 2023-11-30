@@ -3,4 +3,4 @@
 port = 8081
 
 [global.databases]
-rustydb = { url = "postgres://postgres:password@db/classdb" }
+rustydb = { url = "postgres://postgres:password@localhost:8082/classdb" }
