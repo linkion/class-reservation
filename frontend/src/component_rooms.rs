@@ -13,9 +13,15 @@ pub struct RoomJSON {
     occupants: i32,
 }
 
+
+#[derive(Properties, PartialEq)]
+pub struct RoomProps {
+    pub dorm_id: i32,
+}
+
 #[function_component]
-pub fn RoomList() -> Html {
-    let dorm_id = 32;
+pub fn RoomList(props: &RoomProps) -> Html {
+    let dorm_id = props.dorm_id;
     let rooms_json = use_state(|| vec![]);
     {
         let rooms_json = rooms_json.clone();
