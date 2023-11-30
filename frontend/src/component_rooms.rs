@@ -25,6 +25,7 @@ pub struct DormJSON {
 #[derive(Properties, PartialEq)]
 pub struct RoomProps {
     pub dorm_id: i32,
+    pub on_click: Callback<bool>,
 }
 
 #[function_component]
@@ -88,8 +89,16 @@ pub fn RoomList(props: &RoomProps) -> Html {
         </>
       }).collect::<Vec<_>>();
 
+      let on_return_select = {
+        let on_click = props.on_click.clone();
+        Callback::from(move |_| {
+          on_click.emit(true);
+        })
+      };
+
     html! {
         <>
+        <button onclick={on_return_select} class="btn btn-primary">{"Return"}</button>
         <h2>{format!("Dorm: {}", &*dorm_json.dorm_name)}</h2>
         <h3>{"Rooms:"}</h3>
             <div class="row">

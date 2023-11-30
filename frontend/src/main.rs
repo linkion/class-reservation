@@ -22,10 +22,14 @@ fn app() -> Html {
     let on_click_dorm = Callback::from(move |dorm_id: i32| {
         callback_view.set(CurrentView::Rooms(dorm_id));
     });
+    let callback_view = view.clone();
+    let on_click_return: Callback<_> = Callback::from(move |_| {
+      callback_view.set(CurrentView::Dorms);
+    });
     
     let view_html = match *view {
         CurrentView::Dorms => html!(<DormList on_click={on_click_dorm} />),
-        CurrentView::Rooms(dorm_id) => html!(<RoomList dorm_id={dorm_id} />),
+        CurrentView::Rooms(dorm_id) => html!(<RoomList dorm_id={dorm_id} on_click={on_click_return} />),
     };
 
     html! {
