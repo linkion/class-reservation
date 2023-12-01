@@ -7,7 +7,7 @@ use diesel::prelude::*;
 
 // CREATE new room at given dormitory (dorm_id)
 #[post("/rooms", data="<form_input>", rank=0)]
-fn post_room(form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
+pub fn post_room(form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
     use backend::schema::dormitories::dsl::*;
     use backend::schema::dormitories_rooms::dsl::*;
 
@@ -35,7 +35,7 @@ fn post_room(form_input: Form<RoomInput>) -> Json<RoomJsonRet> {
 }
 
 #[post("/rooms", data="<form_input>", rank=1)]
-fn post_room_json(form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
+pub fn post_room_json(form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
     use backend::schema::dormitories::dsl::*;
     use backend::schema::dormitories_rooms::dsl::*;
 
@@ -64,7 +64,7 @@ fn post_room_json(form_input: Json<RoomInput>) -> Json<RoomJsonRet> {
 
 // RETURN single room with room_id
 #[get("/rooms/<room_id>", rank=0)]
-fn get_room(room_id: i32) -> Json<RoomJsonRet> {
+pub fn get_room(room_id: i32) -> Json<RoomJsonRet> {
     use backend::schema::rooms::dsl::rooms;
 
     let connection = &mut establish_connection();
@@ -82,7 +82,7 @@ fn get_room(room_id: i32) -> Json<RoomJsonRet> {
 
 // RETURN all rooms within dorm
 #[get("/dorms/<dorm_id>/rooms")]
-fn get_dorm_rooms(dorm_id: i32) -> Json<Vec<RoomJsonRet>> {
+pub fn get_dorm_rooms(dorm_id: i32) -> Json<Vec<RoomJsonRet>> {
 
 
     let connection = &mut establish_connection();
@@ -105,7 +105,7 @@ fn get_dorm_rooms(dorm_id: i32) -> Json<Vec<RoomJsonRet>> {
 }
 
 #[get("/rooms")]
-fn get_all_rooms() -> Json<Vec<RoomJsonRet>> {
+pub fn get_all_rooms() -> Json<Vec<RoomJsonRet>> {
   use backend::schema::rooms::dsl::*;
 
   let connection = &mut establish_connection();
@@ -132,7 +132,7 @@ fn delete_room(dorm_id: i32, room_number: i32) -> Json<RoomJsonRet> {
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
-struct RoomJsonRet {
+pub struct RoomJsonRet {
     id: i32,
     room_number: i32,
     max_occupants: i32,
@@ -151,10 +151,10 @@ pub struct LinkJson {
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
 #[derive(FromForm)]
-struct RoomInput {
-    room_number: i32,
-    max_occupants: i32,
-    dorm_id: i32,
+pub struct RoomInput {
+    pub room_number: i32,
+    pub max_occupants: i32,
+    pub dorm_id: i32,
 }
 
 pub fn routes() -> Vec<Route> {

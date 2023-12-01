@@ -51,12 +51,8 @@ fn reset_data() -> Status {
         let new_dorm_id = result_dorm.id;
         let example_room_nums: Vec<i32> = vec![101,102,103,200,202];
         for room_num in example_room_nums.iter() {
-            let new_room = NewRoom { room_number: room_num, max_occupants: &2 };
-
-            let result_room: Room = diesel::insert_into(backend::schema::rooms::table).values(new_room).get_result(connection).expect("failed to insert new room");
-            let new_room_id = result_room.id;
-
-            diesel::insert_into(dormitories_rooms).values(DormitoriesRooms { dorm_id: new_dorm_id, room_id: new_room_id }).execute(connection).expect("failed to link dorm and room");
+          use crate::routes_rooms::{post_room_json, RoomInput};
+          post_room_json(rocket::serde::json::Json(RoomInput { room_number: *room_num, max_occupants: 2, dorm_id: new_dorm_id }));
         }
     }
 

@@ -7,7 +7,7 @@ use diesel::prelude::*;
 
 // CREATE
 #[post("/dorms", data="<form_input>", rank=0)]
-fn post_dorm(form_input: Form<DormInput>) -> Json<DormJsonRet> {
+pub fn post_dorm(form_input: Form<DormInput>) -> Json<DormJsonRet> {
   use backend::schema::dormitories;
 
   let new_dorm = NewDorm { dorm_name: &form_input.dorm_name, dorm_group: &form_input.dorm_group };
@@ -26,7 +26,7 @@ fn post_dorm(form_input: Form<DormInput>) -> Json<DormJsonRet> {
 }
 
 #[post("/dorms", data="<form_input>", rank=1)]
-fn post_dorm_json(form_input: Json<DormInput>) -> Json<DormJsonRet> {
+pub fn post_dorm_json(form_input: Json<DormInput>) -> Json<DormJsonRet> {
   use backend::schema::dormitories;
 
   let new_dorm = NewDorm { dorm_name: &form_input.dorm_name, dorm_group: &form_input.dorm_group };
@@ -46,7 +46,7 @@ fn post_dorm_json(form_input: Json<DormInput>) -> Json<DormJsonRet> {
 
 // RETURN
 #[get("/dorms/<dorm_id>")]
-fn get_dorm(dorm_id: i32) -> Json<DormJsonRet> {
+pub fn get_dorm(dorm_id: i32) -> Json<DormJsonRet> {
   use backend::schema::dormitories::dsl::*;
 
   let connection = &mut establish_connection();
@@ -58,7 +58,7 @@ fn get_dorm(dorm_id: i32) -> Json<DormJsonRet> {
 }
 
 #[get("/dorms")]
-fn get_all_dorms() -> Json<Vec<DormJsonRet>> {
+pub fn get_all_dorms() -> Json<Vec<DormJsonRet>> {
   use backend::schema::dormitories::dsl::*;
 
   let connection = &mut establish_connection();
