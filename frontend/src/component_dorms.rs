@@ -81,9 +81,11 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
+          <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
           <div class="card-body">
             <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
-            <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
+            <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
+            <button onclick={on_card_select} class="stretched-link btn btn-primary">{"See Rooms"}</button>
           </div>
         </div>
       </div>
@@ -104,9 +106,11 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
-            <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
+        <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
+        <div class="card-body">
+          <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+          <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
+          <button onclick={on_card_select} class="stretched-link btn btn-primary">{"See Rooms"}</button>
           </div>
         </div>
       </div>
@@ -127,9 +131,11 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
-            <button onclick={on_card_select} class="stretched-link">{"See Rooms"}</button>
+        <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
+        <div class="card-body">
+          <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
+          <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
+          <button onclick={on_card_select} class="stretched-link btn btn-primary">{"See Rooms"}</button>
           </div>
         </div>
       </div>
