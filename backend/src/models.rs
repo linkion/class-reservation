@@ -22,6 +22,7 @@ pub struct Dorm {
     pub dorm_group: String,
     pub rooms: i32,
     pub rooms_available: i32,
+    pub dorm_pic: String,
 }
 
 /*
@@ -106,6 +107,7 @@ pub struct RoomsStudentsReservations {
 pub struct NewDorm<'a> {
     pub dorm_name: &'a str,
     pub dorm_group: &'a str,
+    pub dorm_pic: &'a str,
 }
 
 #[derive(Insertable)]

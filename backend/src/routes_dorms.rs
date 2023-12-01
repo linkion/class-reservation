@@ -10,7 +10,7 @@ use diesel::prelude::*;
 pub fn post_dorm(form_input: Form<DormInput>) -> Json<DormJsonRet> {
   use backend::schema::dormitories;
 
-  let new_dorm = NewDorm { dorm_name: &form_input.dorm_name, dorm_group: &form_input.dorm_group };
+  let new_dorm = NewDorm { dorm_name: &form_input.dorm_name, dorm_group: &form_input.dorm_group, dorm_pic: &form_input.dorm_pic };
 
   let connection = &mut establish_connection();
 
@@ -22,14 +22,14 @@ pub fn post_dorm(form_input: Form<DormInput>) -> Json<DormJsonRet> {
   let rooms = result.rooms;
   let rooms_available = result.rooms_available;
   let links: Vec<LinkJson> = vec![];
-  Json(DormJsonRet {id,dorm_name,dorm_group,links, rooms, rooms_available })
+  Json(DormJsonRet {id,dorm_name,dorm_group,links,rooms,rooms_available, dorm_pic: result.dorm_pic })
 }
 
 #[post("/dorms", data="<form_input>", rank=1)]
 pub fn post_dorm_json(form_input: Json<DormInput>) -> Json<DormJsonRet> {
   use backend::schema::dormitories;
 
-  let new_dorm = NewDorm { dorm_name: &form_input.dorm_name, dorm_group: &form_input.dorm_group };
+  let new_dorm = NewDorm { dorm_name: &form_input.dorm_name, dorm_group: &form_input.dorm_group, dorm_pic: &form_input.dorm_pic };
 
   let connection = &mut establish_connection();
 
@@ -41,7 +41,7 @@ pub fn post_dorm_json(form_input: Json<DormInput>) -> Json<DormJsonRet> {
   let rooms = result.rooms;
   let rooms_available = result.rooms_available;
   let links: Vec<LinkJson> = vec![];
-  Json(DormJsonRet {id,dorm_name,dorm_group,links, rooms, rooms_available })
+  Json(DormJsonRet {id,dorm_name,dorm_group,links,rooms,rooms_available, dorm_pic: result.dorm_pic })
 }
 
 // RETURN
@@ -54,7 +54,7 @@ pub fn get_dorm(dorm_id: i32) -> Json<DormJsonRet> {
   let result: Dorm = dormitories.find(dorm_id).select(Dorm::as_select()).first(connection).expect("failed to find dorm");
 
   let links: Vec<LinkJson> = vec![];
-  Json(DormJsonRet {id:result.id,dorm_name:result.dorm_name.clone(),dorm_group:result.dorm_group.clone(),links, rooms: result.rooms, rooms_available: result.rooms_available })
+  Json(DormJsonRet {id:result.id,dorm_name:result.dorm_name.clone(),dorm_group:result.dorm_group.clone(),links,rooms:result.rooms,rooms_available:result.rooms_available, dorm_pic: result.dorm_pic })
 }
 
 #[get("/dorms")]
@@ -68,7 +68,7 @@ pub fn get_all_dorms() -> Json<Vec<DormJsonRet>> {
   let mut results_json: Vec<DormJsonRet> = vec![];
 
   for item in results.iter() {
-    let new_dorm_json = DormJsonRet {id:item.id,dorm_name:item.dorm_name.clone(),dorm_group:item.dorm_group.clone(),links:vec![], rooms: item.rooms, rooms_available: item.rooms_available };
+    let new_dorm_json = DormJsonRet {id:item.id,dorm_name:item.dorm_name.clone(),dorm_group:item.dorm_group.clone(),links:vec![],rooms:item.rooms,rooms_available:item.rooms_available, dorm_pic: item.dorm_pic.clone() };
     results_json.push(new_dorm_json);
   }
 
@@ -87,6 +87,7 @@ pub struct DormJsonRet {
     dorm_group: String,
     rooms: i32,
     rooms_available: i32,
+    dorm_pic: String,
     links: Vec<LinkJson>,
 }
 
@@ -102,8 +103,9 @@ pub struct LinkJson {
 #[serde(crate = "rocket::serde")]
 #[derive(FromForm)]
 pub struct DormInput {
-    dorm_name: String,
-    dorm_group: String,
+  dorm_name: String,
+  dorm_group: String,
+  dorm_pic: String,
 }
 
 pub fn routes() -> Vec<Route> {

@@ -45,7 +45,8 @@ fn reset_data() -> Status {
     for item in records.iter() {
         let new_dorm_name: String = item[0].to_string();
         let new_dorm_group: String = item[1].trim().to_string();
-        let new_dorm = NewDorm { dorm_name: &new_dorm_name, dorm_group: &new_dorm_group };
+        let new_dorm_pic: String = item[2].trim().to_string();
+        let new_dorm = NewDorm { dorm_name: &new_dorm_name, dorm_group: &new_dorm_group, dorm_pic: &new_dorm_pic };
         let result_dorm: Dorm = diesel::insert_into(dormitories).values(new_dorm).returning(Dorm::as_returning()).get_result(connection).expect("failed to insert new dorm");
         
         let new_dorm_id = result_dorm.id;
