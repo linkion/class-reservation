@@ -3,8 +3,6 @@ use yew::{function_component, html, Html, Callback};
 use serde::Deserialize;
 use gloo_net::http::Request;
 
-use crate::CurrentView;
-
 #[derive(Deserialize, Debug, Clone)]
 pub struct DormJSON {
   pub id: i32,
