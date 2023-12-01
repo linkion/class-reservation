@@ -136,9 +136,13 @@ dependencies = [
 name = "frontend"
 version = "0.1.0"
 dependencies = [
+ "gloo 0.10.0",
  "gloo-net 0.4.0",
+ "gloo-storage 0.3.0",
  "serde",
+ "wasm-bindgen",
  "wasm-bindgen-futures",
+ "web-sys",
  "yew",
  "yew-bootstrap",
 ]
