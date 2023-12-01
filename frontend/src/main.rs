@@ -5,10 +5,12 @@ use yew_bootstrap::util::*;
 mod component_dorms;
 mod component_rooms;
 mod component_login;
+mod component_navbar;
 
 use crate::component_dorms::*;
 use crate::component_rooms::*;
 use crate::component_login::*;
+use crate::component_navbar::*;
 
 #[derive(PartialEq)]
 #[derive(Copy, Clone)]
@@ -37,7 +39,7 @@ fn app() -> Html {
     html! {
       <>
           {include_cdn()}
-          <StudentLoginHTML />
+          <Navbar />
           <h1>{ "UIUC Dorm Reservation" }</h1>
           <div>
               {view_html}
