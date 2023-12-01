@@ -1,16 +1,16 @@
-dorm_name, dorm_group
-Unit One/Allen Hall, UrbanaNorth
-Busey–Evans, UrbanaNorth
-Illinois Street Residence Halls (ISR), UrbanaNorth
-Lincoln Avenue Residence Halls (LAR), UrbanaNorth
-Florida Avenue Residence Halls (FAR), UrbanaSouth
-Pennsylvania Avenue Residence Halls (PAR), UrbanaSouth
-Barton and Lundgren, IkenberryCommonsNorth
-Hopkins, IkenberryCommonsNorth
-Nugent, IkenberryCommonsNorth
-Wassaja, IkenberryCommonsNorth
-Weston, IkenberryCommonsNorth
-Bousfield, IkenberryCommonsSouth
-Scott, IkenberryCommonsSouth
-Snyder, IkenberryCommonsSouth
-Taft–Van Doren, IkenberryCommonsSouth
+dorm_name, dorm_group, dorm_pic
+Unit One/Allen Hall, UrbanaNorth, https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg
+Busey–Evans, UrbanaNorth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Busey-Evans-Exterior-2.jpg
+Illinois Street Residence Halls (ISR), UrbanaNorth, https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/ISR-exterior-2-7.jpg
+Lincoln Avenue Residence Halls (LAR), UrbanaNorth, https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/LAR-EXT-1.jpg
+Florida Avenue Residence Halls (FAR), UrbanaSouth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/far-exterior-2.jpg
+Pennsylvania Avenue Residence Halls (PAR), UrbanaSouth, https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/FAR-PAR.jpg
+Barton and Lundgren, IkenberryCommonsNorth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Barton-Ludngren-exterior-1.jpg
+Hopkins, IkenberryCommonsNorth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Barton-Ludngren-exterior-1.jpg
+Nugent, IkenberryCommonsNorth, https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Nugent-Exterior-1_0.jpg
+Wassaja, IkenberryCommonsNorth, https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Wassaja-Hall-Exterior-2-web.jpg
+Weston, IkenberryCommonsNorth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/weston-hero.png.jpg
+Bousfield, IkenberryCommonsSouth, https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Bousfield-Exterior-2.jpg
+Scott, IkenberryCommonsSouth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Scott-3.jpg
+Snyder, IkenberryCommonsSouth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/Snyder-Exterior-1.jpg
+Taft–Van Doren, IkenberryCommonsSouth, https://housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/TVD_0.jpg

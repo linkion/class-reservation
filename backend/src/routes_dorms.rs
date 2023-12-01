@@ -81,7 +81,7 @@ pub fn get_all_dorms() -> Json<Vec<DormJsonRet>> {
 
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
-struct DormJsonRet {
+pub struct DormJsonRet {
     id: i32,
     dorm_name: String,
     dorm_group: String,
@@ -101,7 +101,7 @@ pub struct LinkJson {
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
 #[derive(FromForm)]
-struct DormInput {
+pub struct DormInput {
     dorm_name: String,
     dorm_group: String,
 }
