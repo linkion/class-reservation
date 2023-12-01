@@ -2,9 +2,10 @@ use yew::prelude::*;
 use serde::Deserialize;
 use gloo_net::http::Request;
 
+/*
 use yew_bootstrap::component::*;
 use yew_bootstrap::component::card::*;
-
+*/
 #[derive(Deserialize, Debug, Clone)]
 pub struct RoomJSON {
     id: i32,
@@ -47,7 +48,7 @@ pub fn RoomList(props: &RoomProps) -> Html {
         <p key={room.id}>{format!("{} . . . . . . {} . . . . . . {}", room.room_number, room.max_occupants, room.occupants)}</p>
     }).collect::<Html>();
     */
-    let roomsHTML = rooms.iter().map(|room| html_nested! {
+    let rooms_html = rooms.iter().map(|room| html_nested! {
         <>
           <div class="col-sm-5">
             <div class="card">
@@ -63,7 +64,7 @@ pub fn RoomList(props: &RoomProps) -> Html {
         <>
         <h2>{"Rooms:"}</h2>
             <div class="row">
-                {roomsHTML}
+                {rooms_html}
             </div>
         </>
     }

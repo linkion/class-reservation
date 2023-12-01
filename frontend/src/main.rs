@@ -16,7 +16,7 @@ fn app() -> Html {
             <div>
                 <h3>{"Dorms: "}</h3>
                 <DormList />
-                <RoomList dorm_id=1/>
+                <RoomList dorm_id=15/>
             </div>
             {include_cdn_js()}
         </>
