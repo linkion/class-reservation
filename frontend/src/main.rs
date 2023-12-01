@@ -30,10 +30,13 @@ fn app() -> Html {
     let on_click_return: Callback<_> = Callback::from(move |_| {
       callback_view.set(CurrentView::Dorms);
     });
+    let room_on_click: Callback<_> = Callback::from(move |_| {
+        //
+    });
     
     let view_html = match *view {
         CurrentView::Dorms => html!(<DormList on_click={on_click_dorm} />),
-        CurrentView::Rooms(dorm_id) => html!(<RoomList dorm_id={dorm_id} on_click={on_click_return} />),
+        CurrentView::Rooms(dorm_id) => html!(<RoomList dorm_id={dorm_id} on_click={on_click_return} room_on_click={room_on_click}/>),
     };
 
     html! {

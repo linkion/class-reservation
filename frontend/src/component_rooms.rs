@@ -27,6 +27,7 @@ pub struct DormJSON {
 pub struct RoomProps {
     pub dorm_id: i32,
     pub on_click: Callback<bool>,
+    pub room_on_click: Callback<i32>,
 }
 
 #[function_component]
@@ -78,16 +79,28 @@ pub fn RoomList(props: &RoomProps) -> Html {
         <p key={room.id}>{format!("{} . . . . . . {} . . . . . . {}", room.room_number, room.max_occupants, room.occupants)}</p>
     }).collect::<Html>();
     */
-    let rooms_html = rooms.iter().map(|room| html_nested! {
+    let rooms_html = rooms.iter().map(|room| {
+      let on_card_select = {
+        let room_on_click = props.room_on_click.clone();
+        let room = room.clone();
+        Callback::from(move |_| {
+          
+        })
+      };
+      
+      html_nested! {
         <>
-          <div class="col-sm-5">
+          <div class="col-sm-2">
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">{format!("Room Number: {} . . . Max Occupants: {} . . . Current Occupants: {}", room.room_number,  room.max_occupants, room.occupants)}</h5>
+                <h5 class="card-title">{format!("Room Number: {}", room.room_number)}</h5>
+                <h6 class="card-title">{format!("Current Occupants: {} / {}", room.occupants, room.max_occupants)}</h6>
+                <button onclick={on_card_select} class="stretched-link btn btn-primary">{"Reserve"}</button>
               </div>
             </div>
           </div>
         </>
+      }
       }).collect::<Vec<_>>();
 
       let on_return_select = {
