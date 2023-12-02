@@ -74,17 +74,12 @@ pub fn RoomList(props: &RoomProps) -> Html {
 
     let rooms : Vec<RoomJSON> = rooms_json.to_vec();
 
-    /*
-    let rooms = rooms.iter().map(|room| html! {
-        <p key={room.id}>{format!("{} . . . . . . {} . . . . . . {}", room.room_number, room.max_occupants, room.occupants)}</p>
-    }).collect::<Html>();
-    */
     let rooms_html = rooms.iter().map(|room| {
       let on_card_select = {
         let room_on_click = props.room_on_click.clone();
         let room = room.clone();
         Callback::from(move |_| {
-          
+          //
         })
       };
       

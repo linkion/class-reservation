@@ -10,6 +10,7 @@ pub struct DormJSON {
   pub dorm_group: String,
   pub rooms: i32,
   pub rooms_available: i32,
+  pub dorm_pic: String
 }
 
 #[derive(Properties, PartialEq)]
@@ -56,7 +57,7 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
-          <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
+          <img src={dorm.dorm_pic.clone()} class="card-img-top" />
           <div class="card-body">
             <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
             <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
@@ -81,7 +82,7 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
-          <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
+          <img src={dorm.dorm_pic.clone()} class="card-img-top" />
           <div class="card-body">
             <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
             <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
@@ -106,7 +107,7 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
-        <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
+        <img src={dorm.dorm_pic.clone()} class="card-img-top" />
         <div class="card-body">
           <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
           <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
@@ -131,7 +132,7 @@ pub fn DormList(Props { on_click }: &Props) -> Html {
     <>
       <div class="col-sm-2">
         <div class="card">
-        <img src="https://www.housing.illinois.edu/sites/default/files/styles/hero_image/public/paragraphs/hero/2023-01/DSC04299%20copy.jpg" class="card-img-top" />
+        <img src={dorm.dorm_pic.clone()} class="card-img-top" />
         <div class="card-body">
           <h5 class="card-title">{dorm.dorm_name.clone()}</h5>
           <p>{format!("Available Rooms: {}/{}", dorm.rooms_available, dorm.rooms)}</p>
