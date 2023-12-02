@@ -21,16 +21,17 @@ pub fn StudentLoginHTML() -> Html {
 
   html! {
     <>
-      <form>
-          <div class="form-group">
+      <form class="form-horizontal" method="post" accept-charset="UTF-8">
+          <div class="login-form">
           <label for="studentFirstName">{"First Name"}</label>
-          <input type="firstName" class="form-control" id="studentFirstName" placeholder="First Name" />
+          <input type="firstName" class="form-control login" id="studentFirstName" placeholder="First Name" />
         </div>
         <div class="form-group">
           <label for="studentLastName">{"Last Name"}</label>
-          <input type="lastName" class="form-control" id="studentLastName" placeholder="Last Name" />
+          <input type="lastName" class="form-control login" id="studentLastName" placeholder="Last Name" />
         </div>
-        <button type="submit" class="btn btn-primary">{"Submit"}</button>
+        <br/>
+        <button type="submit" class="btn btn-success">{"Submit"}</button>
       </form>
     </>
   }
