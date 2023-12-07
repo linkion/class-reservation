@@ -12,7 +12,6 @@ use gloo::storage::LocalStorage;
 use gloo_storage::{Storage, SessionStorage};
 
 #[derive(Serialize, Deserialize, Clone)]
-#[derive(Serialize, Deserialize, Clone)]
 pub struct StudentLogin {
   pub id: i32,
   pub first_name: String,

@@ -35,13 +35,13 @@ fn put_hold_room(form_input: Json<RoomStateInput>) -> Status {
   Status::Ok
 }
 
-#[put("/rooms/reserve", data="<form_input>")]
-fn put_reserve_room(form_input: Json<RoomStateInput>) -> Status {
+#[get("/rooms/reserve/<student_id_num>/<room_id_num>")]
+fn put_reserve_room(student_id_num: i32, room_id_num: i32) -> Status {
   use backend::schema::dormitories::dsl::*;
   use backend::schema::dormitories_rooms::dsl::*;
   use backend::schema::students::dsl::*;
-  let select_room_id = form_input.room_id;
-  let student_id = form_input.student_id;
+  let select_room_id = room_id_num;
+  let student_id = student_id_num;
 
   let connection = &mut establish_connection();
 
