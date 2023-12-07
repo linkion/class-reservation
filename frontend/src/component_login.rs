@@ -5,11 +5,13 @@ use gloo_net::http::Request;
 use wasm_bindgen::JsCast;
 use web_sys::HtmlInputElement;
 use yew::prelude::*;
+use yew::virtual_dom::VNode;
 use yew::{function_component, html, Html, Callback};
 use serde::{Deserialize, Serialize};
 use gloo::storage::LocalStorage;
 use gloo_storage::{Storage, SessionStorage};
 
+#[derive(Serialize, Deserialize, Clone)]
 #[derive(Serialize, Deserialize, Clone)]
 pub struct StudentLogin {
   pub id: i32,
