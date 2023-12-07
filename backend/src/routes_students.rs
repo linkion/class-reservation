@@ -29,6 +29,21 @@ fn get_student(id: i32) -> Json<StudentJsonRet> {
   Json(StudentJsonRet { id, first_name: student.first_name, last_name: student.last_name, links: vec![] })
 }
 
+#[get("/students")]
+fn get_students() -> Json<Vec<StudentJsonRet>> {
+  use backend::schema::students::dsl::students;
+
+  let connection = &mut establish_connection();
+  let student: Vec<Student> = students.select(Student::as_select()).get_results(connection).expect("student not found");
+  let mut studentsRet: Vec<StudentJsonRet> = vec![];
+
+  for item in student.iter() {
+    studentsRet.push(StudentJsonRet { id: item.id, first_name: item.first_name.clone(), last_name: item.last_name.clone(), links: vec![] });
+  }
+
+  Json(studentsRet)
+}
+
 // UPDATE
 
 // DELETE
@@ -60,5 +75,5 @@ pub struct StudentInput {
 }
 
 pub fn routes() -> Vec<Route> {
-  routes![get_student, post_student]
+  routes![get_student, post_student, get_students]
 }

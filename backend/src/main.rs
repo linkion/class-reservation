@@ -27,6 +27,7 @@ fn reset_data() -> Status {
     let connection = &mut backend::establish_connection();
 
     diesel::delete(dormitories).execute(connection).expect("failed to delete dorms table");
+    diesel::delete(backend::schema::students::table).execute(connection).expect("failed to delete student table");
     diesel::delete(backend::schema::rooms::table).execute(connection).expect("failed to delete rooms table");
     diesel::delete(dormitories_rooms).execute(connection).expect("failed to delete dormitories_rooms table");
     diesel::delete(rooms_students).execute(connection).expect("failed to delete rooms_students table");
@@ -37,6 +38,8 @@ fn reset_data() -> Status {
     use csv::{ReaderBuilder, StringRecord};
 
     let mut rdr = ReaderBuilder::new().from_path("src/dormitories.csv").expect("dormitories.csv not found");
+
+    diesel::insert_into(backend::schema::students::table).values(NewStudent{ first_name: "Hello, ", last_name: "World!" }).execute(connection).expect("failed to insert student");
 
     let records = rdr
         .records()

@@ -87,14 +87,14 @@ pub fn RoomList(props: &RoomProps) -> Html {
         let room = room.clone();
         let room_state = RoomStateInput {
           room_id: room.id,
-          student_id: 0,
+          student_id: 1,
         };
         Callback::from(move |_| {
           let room_state = room_state.clone();
           // Reserve Button
           log!(room_state.room_id.clone());
           wasm_bindgen_futures::spawn_local(async move {
-            Request::get(format!("http://localhost:8081/rooms/reserve/{}/{}", room_state.room_id, room_state.student_id).as_str()).send().await;
+            let _ = Request::get(format!("http://localhost:8081/rooms/reserve/{}/{}", room_state.student_id, room_state.room_id).as_str()).send().await.unwrap().status();
           });
         })
       };
