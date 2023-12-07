@@ -31,7 +31,7 @@ fn app() -> Html {
       callback_view.set(CurrentView::Dorms);
     });
     let room_on_click: Callback<_> = Callback::from(move |_| {
-        //
+        
     });
     
     let view_html = match *view {

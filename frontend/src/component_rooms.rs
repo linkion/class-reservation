@@ -1,5 +1,6 @@
+use gloo::console::log;
 use yew::prelude::*;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use gloo_net::http::Request;
 
 /*
@@ -28,6 +29,12 @@ pub struct RoomProps {
     pub dorm_id: i32,
     pub on_click: Callback<bool>,
     pub room_on_click: Callback<i32>,
+  }
+
+#[derive(Deserialize, Serialize, Clone)]
+pub struct RoomStateInput {
+  pub room_id: i32,
+  pub student_id: i32,
 }
 
 #[function_component]
@@ -78,8 +85,17 @@ pub fn RoomList(props: &RoomProps) -> Html {
       let on_card_select = {
         let room_on_click = props.room_on_click.clone();
         let room = room.clone();
+        let room_state = RoomStateInput {
+          room_id: room.id,
+          student_id: 0,
+        };
         Callback::from(move |_| {
-          //
+          let room_state = room_state.clone();
+          // Reserve Button
+          log!(room_state.room_id.clone());
+          wasm_bindgen_futures::spawn_local(async move {
+            Request::get(format!("http://localhost:8081/rooms/reserve/{}/{}", room_state.room_id, room_state.student_id).as_str()).send().await;
+          });
         })
       };
       
