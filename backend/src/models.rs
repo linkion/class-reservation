@@ -55,7 +55,6 @@ pub struct Student {
     pub id: i32,
     pub first_name: String,
     pub last_name: String,
-    pub middle_name: Option<String>,
 }
 
 #[derive(Identifiable, Selectable, Queryable, Associations, Debug)]
@@ -122,5 +121,4 @@ pub struct NewRoom<'a> {
 pub struct NewStudent<'a> {
     pub first_name: &'a str,
     pub last_name: &'a str,
-    pub middle_name: &'a str,
 }
