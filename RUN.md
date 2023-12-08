@@ -26,8 +26,22 @@ And press the Reset Database button
 If, you get a 500: Internal Error, there most likely is an issue with connecting to the database,
 make sure to check docker to see if `db` is running. If so, then make sure that in the backend, `.env`, DATABASE_URL should equal the url to the postgres server
 
+---
+
+Navigate to `/backend`
+
+Then run `diesel migration run`
+
+Then start the server with `cargo run`
+
+To then start the frontend, navigate to `/frontend`
+
+run: `trunk serve`
+
 View the frontend by going to [frontend website](http://localhost:8080/)
 
+---
+---
 ### Running Locally
 
 You'll still need Docker to run the postgres database
@@ -39,6 +53,8 @@ To run the backend, you'll need to download [diesel cli](https://github.com/dies
 Navigate to `/backend`
 
 Then run `diesel migration run`
+
+---
 
 Then start the server with `cargo run`
 
